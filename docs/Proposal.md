@@ -80,6 +80,12 @@ via Michael
 
 via Josh
 
+Customer: Undergraduate, early twenties.
+Problem: Would like to know how many people are at the gym. He goes to the gym and finds it very crowded and has to wait for a long time to use the equipment. Possible solutions: There are no simple solutions for this problem. You can get the number of people coming in because you have to scan buzzcards to get in, however there is no way to measure the amount of people leaving.
+
+Customer: Undergraduate, teenager. 
+Problem: He wants to know the fastest walking path to class and how long it will take so he knows the latest possible time to leave. This is already possible using Google maps, so I do not think it needs to be redone.
+
 
 ##Milestones and Deliverables
 
