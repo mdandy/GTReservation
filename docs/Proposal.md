@@ -1,12 +1,12 @@
 #Team Name##Table of Contents
 
-1. Members
-2. Abstract
-3. GitHub
+1. Team Members
+2. Project Description
+3. User Interview Results
 4. Milestones and Deliverables
 5. References
-##Members* **Michael Dandy** - mdandy3@gatech.edu
-* **Jonathan Edwards** - jedwards36@gatech.edu* **Kevin Johnstone** - kjohnstone6@gatech.edu* **Josh Zeder** - jzeder3@gatech.edu##Abstract
+##Team Members* **Michael Dandy** - mdandy3@gatech.edu
+* **Jonathan Edwards** - jedwards36@gatech.edu* **Kevin Johnstone** - kjohnstone6@gatech.edu* **Josh Zeder** - jzeder3@gatech.edu##Project Description
 
 Our application will be designed with frequent users of the Campus 
 Recreation Center (CRC)  in mind. Currently the CRC uses a simple pen and 
@@ -20,7 +20,8 @@ will list the status of rooms in the CRC as well as offer a way for a user
 to reserve a room remotely (using something as familiar as their GT ID 
 Number for validation).
 
-***TODO: all interview data should be integrated, i.e. do not break down on individual basis***
+
+##User Interview Results
 via JonathanCustomer Archetype: Undergraduate, mid-twentiesKey-pain: Parking is a nightmare and he would like to know when one lot is 
 open and another isn’t. The lot next to Howey was mentioned, that he will 
 drive all the way here just to discover that no spaces are available.Possible fixes: He didn’t mention a solution, just that he would want to 
@@ -36,11 +37,10 @@ who would participate).Possible fixes: Create an app for textbook trading and s
 that Tech Students can benefit from each other’s personal libraries. Limited 
 profiles, have the name of the textbook, price, maybe even the class it’s 
 for, and location for meetup were suggested as stuff each student could 
-enter in a post for the app.via Kevinvia Michaelvia Josh##GitHub
-
+enter in a post for the app.via Kevinvia Michaelvia Josh
 ##Milestones and Deliverables
 
-***TODO: Present it in table***##References
+***TODO: Present it in table***##References
 
 * Android API - <http://developer.android.com/reference/classes.html>
 * PHP Manual - <http://www.php.net/manual/en/> 
