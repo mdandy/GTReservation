@@ -34,7 +34,15 @@ information could be:
 
 ***Customer:*** CS Undergrad Student
 
-***Problem:*** blah
+***Problem:*** There should be a free PRS system. As we all know, the PRS system
+was changed  several semesters ago, and it becomes a huge pain for Seniors. Some 
+of their classes require PRS clicker as part of attendance  and/ or participation 
+grade. As result, they have to either buy a new PRS clicker or pay for a 
+subscription fee. Unlike lower-classmen, Seniors won't use that clicker anymore 
+since they are about to graduate.
+
+***Possible fix:*** Create a web or mobile application for PRS system, and it
+should be distributed for free.
 
 <br />
 ###Jonathan Edwards
