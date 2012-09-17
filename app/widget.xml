@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding = "utf-8" ?>
 <widget title="CRC Court Reservation">
-    <library name="jquery" version="1.6.2" />
-    <library name="jquery.mobile" version="1.0b3" /> 
-    <library name="gtmob" version="2.0.0" />
+    <library name="jquery" />
+    <library name="jquery.mobile" /> 
+    <library name="gtmob" />
 	
     <html file="index.html"/>
-	<!-- <javascript file="scripts/general.js"/> -->
+	<!-- <javascript file="scripts/ui.js"/> -->
 </widget>
