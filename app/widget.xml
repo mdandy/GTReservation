@@ -3,7 +3,8 @@
     <library name="jquery" />
     <library name="jquery.mobile" /> 
     <library name="gtmob" />
+	<javascript file="scripts/ui.js"/>
+	<css file="css/style.css" />
 	
     <html file="index.html"/>
-	<javascript file="scripts/ui.js"/>
 </widget>

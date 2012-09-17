@@ -4,12 +4,12 @@
     <div data-role='header' data-position='inline' data-theme='d'>
 	    <a href="#" data-icon='alert' data-transition="pop">GTLogin</a>
 	    <h1>CRC Court Reservation</h1>
-	    <a href="#" data-icon='add' data-transition="pop">Other</a>
+	   <!-- <a href="#" data-icon='add' data-transition="pop">Other</a> -->
    	</div>
 	
 	<div class="page_content" data-role="content">
-		<a onclick="nextPage('my_reservations')" data-role="button" data-icon="star" data-transition="slide">View My Reservations</a>
-		<a onclick="nextPage('create_reservations')" data-role="button" data-icon="search" data-transition="slide">Create Reservations</a>
+		<a onclick="nextPage('my_reservations')" data-role="button" data-icon="star">View My Reservations</a>
+		<a onclick="nextPage('create_reservations')" data-role="button" data-icon="search">Create Reservations</a>
 	</div>
 </div>
 
@@ -17,9 +17,9 @@
 
 <div data-role="page" id="my_reservations">
 	<div data-role='header' data-position='inline' data-theme='d'>
-		<a onclick="prevPage('home_page')" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
 		<h1>CRC Court Reservation - My Reservations</h1>
-		<a href="#" data-icon='add' data-transition="pop">Other</a>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
 	</div>
 	
 	<div class="page_content" data-role="content">
@@ -27,16 +27,16 @@
 			<li data-role=list-divider>September 17, 2012</li>
 			<li>
 				<a onclick="nextPage('reservation_detail', 'loadReservationDetail', '1000AM')">
-					<img src="images/buzz.gif" title="sample"/>
-					<h3>10:00 AM</h3>
-					<h3>Court 1</h3>
+					<img class="image" src="images/buzz.gif" title="sample"/>
+					<h3><span class="court">Court 1</span></h3>
+					<h3><span class="time">10:00 AM</span></h3>
 				</a>
 			</li>
 			<li>
 				<a onclick="nextPage('reservation_detail')">
-					<img src="images/buzz.gif" title="sample"/>
-					<h3>02:00 PM</h3>
-					<h3>Court 3</h3>
+					<img class="image" src="images/buzz.gif" title="sample"/>
+					<h3><span class="court">Court 3</span></h3>
+					<h3><span class="time">02:00 PM</span></h3>
 				</a>
 			</li>
 			
@@ -44,9 +44,9 @@
 			<li data-role=list-divider>September 18, 2012</li>
 			<li>
 				<a onclick="nextPage('reservation_detail')">
-					<img src="images/buzz.gif" title="sample"/>
-					<h3>02:00 PM</h3>
-					<h3>Court 2</h3>
+					<img class="image" src="images/buzz.gif" title="sample"/>
+					<h3><span class="court">Court 2</span></h3>
+					<h3><span class="time">02:00 PM</span></h3>
 				</a>
 			</li>
 		</ul>
@@ -57,13 +57,23 @@
 
 <div data-role="page" id="reservation_detail">
 	<div data-role='header' data-position='inline' data-theme='d'>
-		<a onclick="prevPage('my_reservations')" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
+		<a onclick="prevPage('my_reservations')" data-icon='back'>Back</a>
 		<h1>CRC Court Reservation - Detail</h1>
-		<a href="#" data-icon='add' data-transition="pop">Other</a>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
 	</div>
 	
 	<div class="page_content" data-role="content">
-		<p>Reservation Detail</p>
+		<div id="profile">
+			<img  class="image" src="images/buzz.gif" title="sample"/>
+			<div class="description">
+				<h3><span class="reservation_court">Court 1</span></h3>
+				<h3><span class="label">Date: </span><span class="date">10:00 AM</span></h3>
+				<h3><span class="label">Time: </span><span class="time">10:00 AM</span></h3>
+			</div>
+		</div>
+		<div id="navigation">
+			<a onclick="" data-role="button" data-icon="star">Share to Facebook</a>
+		</div>
 	</div>
 </div>
 
@@ -71,9 +81,9 @@
 
 <div data-role="page" id="create_reservations">
 	<div data-role='header' data-position='inline' data-theme='d'>
-		<a onclick="prevPage('home_page')" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
 		<h1>CRC Court Reservation - Create Reservations</h1>
-		<a href="#" data-icon='add' data-transition="pop">Other</a>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
 	</div>
 	
 	<div class="page_content" data-role="content">

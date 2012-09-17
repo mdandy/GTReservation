@@ -1,0 +1,18 @@
+/* CSS Document */
+
+#reservation_detail .page_content #profile img
+{
+	width: 80px;
+	height: 80px;
+	float: left;
+}
+
+#reservation_detail .page_content #profile .description
+{
+	margin-left: 100px;
+}
+
+#reservation_detail .page_content #navigation
+{
+	clear: both;
+}
