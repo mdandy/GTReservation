@@ -12,6 +12,12 @@
 	margin-left: 100px;
 }
 
+#reservation_detail .page_content #profile .description .label
+{
+	font-style: italic;
+	font-weight: lighter;
+}
+
 #reservation_detail .page_content #navigation
 {
 	clear: both;
