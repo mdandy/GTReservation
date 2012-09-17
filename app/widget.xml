@@ -5,5 +5,5 @@
     <library name="gtmob" />
 	
     <html file="index.html"/>
-	<!-- <javascript file="scripts/ui.js"/> -->
+	<javascript file="scripts/ui.js"/>
 </widget>
