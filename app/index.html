@@ -8,8 +8,8 @@
    	</div>
 	
 	<div class="page_content" data-role="content">
-		<a onclick="loadPage('my_reservations')" data-role="button" data-icon="star" data-transition="slide">View My Reservations</a>
-		<a onclick="loadPage('create_reservations')" data-role="button" data-icon="search" data-transition="slide">Create Reservations</a>
+		<a onclick="nextPage('my_reservations')" data-role="button" data-icon="star" data-transition="slide">View My Reservations</a>
+		<a onclick="nextPage('create_reservations')" data-role="button" data-icon="search" data-transition="slide">Create Reservations</a>
 	</div>
 </div>
 
@@ -17,7 +17,7 @@
 
 <div data-role="page" id="my_reservations">
 	<div data-role='header' data-position='inline' data-theme='d'>
-		<a onclick="loadPage('home_page', true)" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
+		<a onclick="prevPage('home_page')" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
 		<h1>CRC Court Reservation - My Reservations</h1>
 		<a href="#" data-icon='add' data-transition="pop">Other</a>
 	</div>
@@ -26,14 +26,14 @@
 		<ul data-role="listview" data-theme="g">
 			<li data-role=list-divider>September 17, 2012</li>
 			<li>
-				<a href="index.html">
+				<a onclick="nextPage('reservation_detail', 'loadReservationDetail', '1000AM')">
 					<img src="images/buzz.gif" title="sample"/>
 					<h3>10:00 AM</h3>
 					<h3>Court 1</h3>
 				</a>
 			</li>
 			<li>
-				<a href="index.html">
+				<a onclick="nextPage('reservation_detail')">
 					<img src="images/buzz.gif" title="sample"/>
 					<h3>02:00 PM</h3>
 					<h3>Court 3</h3>
@@ -43,7 +43,7 @@
 			
 			<li data-role=list-divider>September 18, 2012</li>
 			<li>
-				<a href="index.html">
+				<a onclick="nextPage('reservation_detail')">
 					<img src="images/buzz.gif" title="sample"/>
 					<h3>02:00 PM</h3>
 					<h3>Court 2</h3>
@@ -53,11 +53,25 @@
 	</div>
 </div>
 
+<!-- Reservation Detail -->
+
+<div data-role="page" id="reservation_detail">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('my_reservations')" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
+		<h1>CRC Court Reservation - Detail</h1>
+		<a href="#" data-icon='add' data-transition="pop">Other</a>
+	</div>
+	
+	<div class="page_content" data-role="content">
+		<p>Reservation Detail</p>
+	</div>
+</div>
+
 <!-- Create Reservations -->
 
 <div data-role="page" id="create_reservations">
 	<div data-role='header' data-position='inline' data-theme='d'>
-		<a onclick="loadPage('home_page', true)" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
+		<a onclick="prevPage('home_page')" data-icon='back' data-transition="slide" data-direction="reverse">Back</a>
 		<h1>CRC Court Reservation - Create Reservations</h1>
 		<a href="#" data-icon='add' data-transition="pop">Other</a>
 	</div>
