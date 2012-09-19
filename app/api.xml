@@ -1,30 +1,68 @@
 <?xml version="1.0"?>
 <api>
 	<description>
-		<![CDATA[This is an API to interact with all the simple items]]>
+		<![CDATA[This is an API to interact with GT CRC Reservation system]]>
 	</description>
 	
-	<command id='simple' security='public'>
+	<command id='reservation' security='public'>
 		<description><![CDATA[This simple API lets you do something simple]]></description>
+		
 		<index>
-			<description><![CDATA[This is how you can get a listing of all simple items]]></description>
-			<action file='simple.php'><![CDATA[listItems();]]></action>
+			<description><![CDATA[
+				List of all court reservations.
+			]]></description>
+			<action file='server/reservation.php'><![CDATA[
+				date_default_timezone_set('UTC');
+				$now = date("Y-m-d H:00:00");	// YYYY-MM-DD HH:MM:SS UTC
+				echo get_all_reservations(-1, $now);
+			]]></action>
 		</index>
+        
 		<get>
-			<description><![CDATA[This is how you can get a specific simple item]]></description>
-			<action file='simple.php'><![CDATA[getItem($_REST['simple']);]]></action>
+			<description><![CDATA[
+				Retrieve court reservations.
+			]]></description>
+			<action file='server/reservation.php'><![CDATA[
+				if (isset($_REST['user_id']))
+					echo get_reservations_by_user_id($_REST['user_id']);
+				else if (isset($_REST['interval']))
+					echo get_reservations_by_time($_REST['court_number'], $_REST['start_time'], $_REST['interval']);
+				else
+					echo get_all_reservations($_REST['court_number'], $_REST['start_time']);
+			]]></action>
 		</get>
+		
 		<post>
-			<description><![CDATA[This is how you can create a simple item]]></description>
-			<action file='simple.php'><![CDATA[addItem($_POST['itemValue']);]]></action>
+			<description><![CDATA[
+				Create a reservation for CRC court. The interval of reservation is one hour and
+				the user can only reserve up to 48 hours in advance.
+			]]></description>
+			<action file='server/reservation.php'><![CDATA[
+				echo create_reservation($_POST['user_id'], $_POST['court_number'], $_POST['start_time']);
+			]]></action>
 		</post>
+		
+		<!-- Unsupported
 		<put>
-			<description><![CDATA[This is how you can update a simple item]]></description>
-			<action file='simple.php'><![CDATA[updateItem($_REST['simple'],$_POST['itemValue']);]]></action>
+			<description><![CDATA[
+				This is how you can update a simple item
+			]]></description>
+			<action file='server/reservation.php'><![CDATA[
+				echo '501 Not Supported';
+			]]></action>
 		</put>
+		-->
+
 		<delete>
-			<description><![CDATA[This is how you can delete a simple item]]></description>
-			<action file='simple.php'><![CDATA[deleteItem($_REST['simple']);]]></action>
+			<description><![CDATA[
+				Cancel reservations.
+			]]></description>
+			<action file='server/reservation.php'><![CDATA[
+				if (isset($_REST['reservation_id']))
+					echo cancel_reservation_by_id($_REST['reservation_id']);
+				else if (isset($_REST['start_time']))
+					echo cancel_reservations_by_time($_REST['court_number'], $_REST['start_time'],$_REST['interval']);
+			]]></action>
 		</delete>
 	</command>
 </api>
