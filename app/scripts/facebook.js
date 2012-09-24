@@ -6,38 +6,15 @@ window.fbAsyncInit = function() {
       cookie     : true, // enable cookies to allow the server to access the session
       xfbml      : true  // parse XFBML
     });
-
-    FB.Event.subscribe('auth.statusChange', handleStatusChange);
   };
-
-function handleStatusChange(response) {
-     document.body.className = response.authResponse ? 'connected' : 'not_connected';
-
-     if (response.authResponse) { // user is logged in
-       console.log(response);
-       //updateUserInfo(response);
-       //publishStory();
-     }
-   }
 
 function loginUser() {    
      FB.login(function(response) { }, {scope:'email'});     
      }
 
-function updateUserInfo(response) {
-     FB.api('/me', function(response) {
-       document.getElementById('user-info').innerHTML = '<img src="https://graph.facebook.com/' + response.id + '/picture">' + response.name;
-     });
-   }
-
 function publishStory() {
   FB.ui({
-    method: 'feed',
-    name: 'I\'m building a social mobile web app!',
-    caption: 'This web app is going to be awesome.',
-    description: 'Check out Facebook\'s developer site to start building.',
-    link: 'https://developers.facebook.com/mobile',
-    picture: 'http://www.facebookmobileweb.com/getting-started/img/facebook_icon_large.png'
+    method: 'feed'
   }, 
   function(response) {
     console.log('publishStory response: ', response);
