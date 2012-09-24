@@ -1,5 +1,3 @@
-<div id="fb-root"></div>
-<script>
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '414447185270616', // App ID
@@ -12,6 +10,18 @@
     FB.Event.subscribe('auth.statusChange', handleStatusChange);
   };
 
+function handleStatusChange(response) {
+     document.body.className = response.authResponse ? 'connected' : 'not_connected';
+
+     if (response.authResponse) {
+       console.log(response);
+     }
+   }
+
+function loginUser() {    
+     FB.login(function(response) { }, {scope:'email'});     
+     }
+
   // Load the SDK Asynchronously
   (function(d){
      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -20,4 +30,3 @@
      js.src = "//connect.facebook.net/en_US/all.js";
      ref.parentNode.insertBefore(js, ref);
    }(document));
-</script>
