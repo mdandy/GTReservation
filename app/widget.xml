@@ -4,7 +4,8 @@
 	<library name="jquery" />
     <library name="gtmob" />
 	<javascript file="scripts/ui.js"/>
-	
+	<javascript file="scripts/facebook.js"/>
+
 	<css file="css/style.css" />
 	
     <html file="index.html"/>
