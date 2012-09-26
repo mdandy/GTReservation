@@ -5,8 +5,9 @@
     <library name="gtmob" />
 	<javascript file="scripts/ui.js"/>
 	<javascript file="scripts/facebook.js"/>
-	<javascript file="scripts/login.js"/>
-
+	<javascript file="scripts/login.js"/> 
+	<javascript file="scripts/JQUERY4U.datetime.js"/>
+	<javascript file="scripts/dateFunctions.js"/>
 	<css file="css/style.css" />
 	
     <html file="index.html"/>
