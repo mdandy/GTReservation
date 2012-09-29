@@ -31,7 +31,7 @@ function cancel_reservation_by_id($reservation_id)
  * @param $interval [Optional] The time interval (in an increment of one hour). THe default value is one hour.
  * @return TRUE on sucess or FALSE otherwise
  */
-function cancel_reservations_by_time($court_number, $start_time, $interval)
+function cancel_reservations_by_time($court_number, $start_time, $interval = 1)
 {
 	return "FALSE";
 }
