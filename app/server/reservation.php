@@ -43,7 +43,7 @@ function create_reservation($user_id, $court_number, $start_time)
 			)
 		)
 	);
-	return json_encode($result);
+	echo json_encode($result);
 }
 
 /**
@@ -58,8 +58,9 @@ function cancel_reservation_by_id($reservation_id)
 	DAL::disconnect();
 	
 	if ($isSuccessful)
-		return "TRUE";
-	return "FALSE";
+		echo "TRUE";
+	else
+		echo "FALSE";
 }
 
 /**
@@ -73,15 +74,19 @@ function cancel_reservations_by_time($court_number, $start_time, $interval = 1)
 {
 	$start_time = __normalize_date($start_time);
 	if ($start_time == NULL)
-		return FALSE;
+	{
+		echo "FALSE";
+		return;
+	}
 	
 	DAL::connect();
 	$isSuccessful = DAL::delete_reservation_by_time($start_time, $interval);
 	DAL::disconnect();
 	
 	if ($isSuccessful)
-		return "TRUE";
-	return "FALSE";
+		echo "TRUE";
+	else
+		echo "FALSE";
 }
 
 /**
