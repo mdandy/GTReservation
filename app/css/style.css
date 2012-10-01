@@ -96,7 +96,7 @@
 
 #create_reservations .page_content #container .ui-grid-d .grid_cell
 {
-	height: 20px;	
+	height: 25px;	
 	text-align: center;
 	border-right: #CCC solid 1px;
 	border-bottom: #CCC solid 1px;
