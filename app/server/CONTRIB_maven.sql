@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: db.cip.gatech.edu
--- Generation Time: Sep 30, 2012 at 01:16 PM
+-- Generation Time: Sep 30, 2012 at 11:02 PM
 -- Server version: 5.5.15-log
 -- PHP Version: 5.3.13
 
@@ -28,8 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `Court1` (
   `reserve_time` datetime NOT NULL,
-  `reserve_status` tinyint(1) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
   `reserve_id` int(11) NOT NULL,
   PRIMARY KEY (`reserve_id`),
   KEY `user_id` (`user_id`)
@@ -43,8 +42,7 @@ CREATE TABLE IF NOT EXISTS `Court1` (
 
 CREATE TABLE IF NOT EXISTS `Court2` (
   `reserve_time` datetime NOT NULL,
-  `reserve_status` tinyint(1) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
   `reserve_id` int(11) NOT NULL,
   PRIMARY KEY (`reserve_id`),
   KEY `user_id` (`user_id`)
@@ -58,8 +56,7 @@ CREATE TABLE IF NOT EXISTS `Court2` (
 
 CREATE TABLE IF NOT EXISTS `Court3` (
   `reserve_time` datetime NOT NULL,
-  `reserve_status` tinyint(1) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
   `reserve_id` int(11) NOT NULL,
   PRIMARY KEY (`reserve_id`),
   KEY `user_id` (`user_id`)
@@ -73,8 +70,7 @@ CREATE TABLE IF NOT EXISTS `Court3` (
 
 CREATE TABLE IF NOT EXISTS `Court4` (
   `reserve_time` datetime NOT NULL,
-  `reserve_status` tinyint(1) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
   `reserve_id` int(11) NOT NULL,
   PRIMARY KEY (`reserve_id`),
   KEY `user_id` (`user_id`)
@@ -88,8 +84,7 @@ CREATE TABLE IF NOT EXISTS `Court4` (
 
 CREATE TABLE IF NOT EXISTS `Court5` (
   `reserve_time` datetime NOT NULL,
-  `reserve_status` tinyint(1) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
   `reserve_id` int(11) NOT NULL,
   PRIMARY KEY (`reserve_id`),
   KEY `user_id` (`user_id`)
@@ -102,14 +97,14 @@ CREATE TABLE IF NOT EXISTS `Court5` (
 --
 
 CREATE TABLE IF NOT EXISTS `Reservations` (
-  `reserve_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `reserve_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(64) NOT NULL,
   `court_id` int(11) NOT NULL,
   `reserve_time` datetime NOT NULL,
-  PRIMARY KEY (`court_id`,`reserve_time`),
+  PRIMARY KEY (`reserve_id`),
   UNIQUE KEY `reserve_id` (`reserve_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -118,9 +113,9 @@ CREATE TABLE IF NOT EXISTS `Reservations` (
 --
 
 CREATE TABLE IF NOT EXISTS `Users` (
-  `user_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `email` varchar(64) NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -132,37 +127,36 @@ CREATE TABLE IF NOT EXISTS `Users` (
 -- Constraints for table `Court1`
 --
 ALTER TABLE `Court1`
-  ADD CONSTRAINT `Court1_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Court1_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Court1_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `Reservations` (`reserve_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Court2`
 --
 ALTER TABLE `Court2`
-  ADD CONSTRAINT `Court2_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Court2_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Court2_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `Reservations` (`reserve_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Court3`
 --
 ALTER TABLE `Court3`
-  ADD CONSTRAINT `Court3_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Court3_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Court3_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `Reservations` (`reserve_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Court4`
 --
 ALTER TABLE `Court4`
-  ADD CONSTRAINT `Court4_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Court4_ibfk_3` FOREIGN KEY (`reserve_id`) REFERENCES `Reservations` (`reserve_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Court4_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Court5`
 --
 ALTER TABLE `Court5`
-  ADD CONSTRAINT `Court5_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `Reservations`
---
-ALTER TABLE `Reservations`
-  ADD CONSTRAINT `Reservations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `Court5_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Court5_ibfk_2` FOREIGN KEY (`reserve_id`) REFERENCES `Reservations` (`reserve_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
