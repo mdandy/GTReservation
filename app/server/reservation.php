@@ -1,17 +1,49 @@
 <?php
 
+require_once("dal.php");
+
+/**
+ * Normalize date to YYYY-MM-DD HH:MM:SS format.
+ * @param $date The date to be normalized
+ * @return THe normalized date or NULL if an error occurs
+ */
+function __normalize_date($date)
+{
+	$date = date_create($date);
+	if (!$date)
+		return NULL;
+	return date_format($date, "Y-m-d H:i:s");
+}
+
 /**
  * Create a reservation for CRC court. The interval of reservation is one hour and
  * the user can only reserve up to 48 hours in advance.
  * @param $user_id The user ID
  * @param $court_number The court number to be reserved
  * @param $start_time The reservation time in YYYY-MM-DD HH:MM:SS UTC format
- * @return The court reservation ID
+ * @return The reservation has been made
  */
 function create_reservation($user_id, $court_number, $start_time)
 {
-	$reservation_id = -1;
-	return $reservation_id;
+	$start_time = __normalize_date($start_time);
+	if ($start_time == NULL)
+		return NULL;
+		
+	DAL::connect();
+	$reservation_id = DAL::insert_reservation($user_id, $court_number, $start_time);
+	DAL::disconnect();
+	
+	$result = array(
+		"reservation" => array(
+			array (
+				"user_id" => $user_id,
+				"reservation_id" => $reservation_id,
+				"court_number" => $court_number,
+				"time" => $start_time
+			)
+		)
+	);
+	return json_encode($result);
 }
 
 /**
@@ -21,6 +53,12 @@ function create_reservation($user_id, $court_number, $start_time)
  */
 function cancel_reservation_by_id($reservation_id)
 {
+	DAL::connect();
+	$isSuccessful = DAL::delete_reservation_by_id($reservation_id);
+	DAL::disconnect();
+	
+	if ($isSuccessful)
+		return "TRUE";
 	return "FALSE";
 }
 
@@ -33,6 +71,16 @@ function cancel_reservation_by_id($reservation_id)
  */
 function cancel_reservations_by_time($court_number, $start_time, $interval = 1)
 {
+	$start_time = __normalize_date($start_time);
+	if ($start_time == NULL)
+		return FALSE;
+	
+	DAL::connect();
+	$isSuccessful = DAL::delete_reservation_by_time($start_time, $interval);
+	DAL::disconnect();
+	
+	if ($isSuccessful)
+		return "TRUE";
 	return "FALSE";
 }
 
@@ -44,7 +92,30 @@ function cancel_reservations_by_time($court_number, $start_time, $interval = 1)
  */
 function get_all_reservations($court_number, $start_time)
 {
-	$result = array("reservation_id" => "-1");
+	$start_time = __normalize_date($start_time);
+	if ($start_time == NULL)
+		return NULL;
+		
+	DAL::connect();
+	$data = DAL::get_reservations($court_number,$start_time);
+	DAL::disconnect();
+	
+	$reservations = array();
+	for ($i = 0; $i < count($data); $i++)
+	{
+		$entry = $data[$i];
+		$temp = array(
+			"user_id" => $entry["user_id"],
+			"reservation_id" => $entry["reserve_id"],
+			"court_number" => $entry["court_id"],
+			"time" => $entry["reserve_time"]
+		);
+		array_push($reservations, $temp);
+	}
+	
+	$result = array(
+		"reservation" => $reservations
+	);
 	echo json_encode($result);
 }
 
@@ -56,7 +127,28 @@ function get_all_reservations($court_number, $start_time)
 function get_reservations_by_user_id($user_id)
 {
 	$result = array("reservation_id" => "-1");
-	return json_encode($result);
+	
+	DAL::connect();
+	$data = DAL::get_reservations_by_user_id($user_id);
+	DAL::disconnect();
+	
+	$reservations = array();
+	for ($i = 0; $i < count($data); $i++)
+	{
+		$entry = $data[$i];
+		$temp = array(
+			"user_id" => $entry["user_id"],
+			"reservation_id" => $entry["reserve_id"],
+			"court_number" => $entry["court_id"],
+			"time" => $entry["reserve_time"]
+		);
+		array_push($reservations, $temp);
+	}
+	
+	$result = array(
+		"reservation" => $reservations
+	);
+	echo json_encode($result);
 }
 
 /**
@@ -68,8 +160,31 @@ function get_reservations_by_user_id($user_id)
  */
 function get_reservations_by_time($court_number, $start_time, $interval)
 {
-	$result = array("reservation_id" => "-1");
-	return json_encode($result);
+	$start_time = __normalize_date($start_time);
+	if ($start_time == NULL)
+		return NULL;
+		
+	DAL::connect();
+	$data = DAL::get_reservations($court_number,$start_time,$interval);
+	DAL::disconnect();
+		
+	$reservations = array();
+	for ($i = 0; $i < count($data); $i++)
+	{
+		$entry = $data[$i];
+		$temp = array(
+			"user_id" => $entry["user_id"],
+			"reservation_id" => $entry["reserve_id"],
+			"court_number" => $entry["court_id"],
+			"time" => $entry["reserve_time"]
+		);
+		array_push($reservations, $temp);
+	}
+	
+	$result = array(
+		"reservation" => $reservations
+	);
+	echo json_encode($result);
 }
 
 ?>

@@ -62,6 +62,20 @@
   print_r($result); 
   printLine();
   
+  $reservation_id = DAL::insert_reservation("jedwards173", 3, "2012-09-25 13:00:00");
+  printResult("insert_reservation 3", $reservation_id);
+  
+  $result = DAL::get_reservations(3, "2012-09-25 10:00:00");
+  print_r($result); 
+  printLine();
+  
+  $successful = DAL::delete_reservation_by_time("2012-09-25 10:00:00", 4);
+  printBool("delete_reservation_by_time", $successful); 
+  
+  $result = DAL::get_reservations(3, "2012-09-25 00:00:00");
+  print_r($result); 
+  printLine();
+ 
   DAL::disconnect();
   
   function printLine()

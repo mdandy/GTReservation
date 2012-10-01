@@ -118,16 +118,7 @@ class DAL {
 	  $query->bindParam(":reserve_time", $reserve_time);
 	  $isSuccessful = $query->execute();
 	  $reservation_id = self::$dbh->lastInsertId(); 
-	  
-	  if ($isSuccessful) {
-		  $sql = "INSERT INTO Court" . $court_id . "(reserve_time, user_id, reserve_id) VALUES (:reserve_time, :user_id, :reserve_id)";
-		  $query = self::$dbh->prepare($sql);
-		  $query->bindParam(":user_id", $user_id, PDO::PARAM_STR, 255);
-	  	  $query->bindParam(":reserve_id", $reservation_id, PDO::PARAM_INT);
-		  $query->bindParam(":reserve_time", $reserve_time);
-		  $isSuccessful = $query->execute();
-		  return $reservation_id;
-	  }
+	  return $reservation_id;
     }
     catch(PDOException $e) {
       //echo ("Error: " . $e->getMessage());
@@ -145,11 +136,11 @@ class DAL {
 		$start_time = $reserve_time;
 		$end_time = $end_time->format("Y-m-d H:i:s");
 		
-		$sql = "SELECT * FROM Court$court_id, Reservations WHERE Reservations.court_id=:court_id "; 
+		$sql = "SELECT * FROM Reservations WHERE Reservations.court_id=:court_id "; 
 		if ($interval > 0)
-			$sql .= " AND Court$court_id.reserve_time BETWEEN :start_time AND :end_time";
+			$sql .= " AND reserve_time BETWEEN :start_time AND :end_time";
 		else
-			$sql .= " AND Court$court_id.reserve_time >= :start_time";
+			$sql .= " AND reserve_time >= :start_time";
 		
 		$query = self::$dbh->prepare($sql);
 		$query->bindParam(":court_id", $court_id, PDO::PARAM_INT);
@@ -171,7 +162,7 @@ class DAL {
 		$num_of_court = 5;
 		$sql = "";
 		for ($i = 1; $i <= 5; $i++) {
-			$sql .= "(SELECT * FROM Reservations,Court$i WHERE Reservations.court_id=$i AND Reservations.user_id=:user_id)";
+			$sql .= "(SELECT * FROM Reservations WHERE court_id=$i AND user_id=:user_id)";
 			if ($i < $num_of_court)
 				$sql .= " UNION ";
 		}
@@ -192,6 +183,32 @@ class DAL {
       $sql = "DELETE FROM Reservations WHERE reserve_id=:reserve_id";
       $query = self::$dbh->prepare($sql);
 	  $query->bindParam(":reserve_id", $reservation_id, PDO::PARAM_INT);
+      $isSuccessful = $query->execute();
+	  return $isSuccessful;
+    }
+    catch(PDOException $e) {
+      //echo ("Error: " . $e->getMessage());
+    }
+    return false; 
+  }
+  
+  public static function delete_reservation_by_time($reserve_time, $interval=0) {
+    try {
+	    $end_time = new DateTime($reserve_time);
+		$end_time->modify("+$interval hours");
+		$start_time = $reserve_time;
+		$end_time = $end_time->format("Y-m-d H:i:s");
+		
+		$sql = "DELETE FROM Reservations WHERE "; 
+		if ($interval > 0)
+			$sql .= " reserve_time BETWEEN :start_time AND :end_time";
+		else
+			$sql .= " reserve_time >= :start_time";	
+		
+      $query = self::$dbh->prepare($sql);
+	  $query->bindParam(":start_time", $start_time);
+	  if ($interval > 0)
+			$query->bindParam(":end_time", $end_time);
       $isSuccessful = $query->execute();
 	  return $isSuccessful;
     }
