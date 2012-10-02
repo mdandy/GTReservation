@@ -4,7 +4,7 @@
 		<![CDATA[This is an API to interact with GT CRC Reservation system]]>
 	</description>
 	
-	<command id='reservation' security='public'>
+	<command id='reservation' security='protected'>
 		<description><![CDATA[This API lets you to reserve a court and retrieve reservation information]]></description>
 		
 		<index>
@@ -73,12 +73,12 @@
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
 				if (isset($_GET['reservation_id']))
-					echo cancel_reservation_by_id($_REST['reservation_id']);
-				else if (isset($_GET['court_number']))
+					echo cancel_reservation_by_id($_GET['reservation_id']);
+				else
 				{
-					$court_number = intval($_POST['court_number']);
-					$interval = intval($_REST['interval']);
-					echo cancel_reservations_by_time($court_number, $_REST['start_time'], $interval);
+					$court_number = intval($_REST['reservation']);
+					$interval = intval($_GET['interval']);
+					echo cancel_reservations_by_time($court_number, $_GET['start_time'], $interval);
 				}
 			]]></action>
 		</delete>

@@ -164,7 +164,7 @@ class DAL {
 				$sql .= " reserve_time BETWEEN :start_time AND :end_time";
 			else
 				$sql .= " reserve_time >= :start_time";
-			$sql .= " ORDER BY reserve_time ASC";
+			$sql .= " ORDER BY reserve_time ASC, court_id ASC";
 		}
 		
 		$query = self::$dbh->prepare($sql);
@@ -186,7 +186,7 @@ class DAL {
   public static function get_reservations_by_user_id($user_id) {
     try {
 		$num_of_court = 5;
-		$sql = "SELECT * FROM Reservations WHERE user_id=:user_id ORDER BY reserve_time ASC, court_id DESC";
+		$sql = "SELECT * FROM Reservations WHERE user_id=:user_id ORDER BY reserve_time ASC, court_id ASC";
 		$query = self::$dbh->prepare($sql);
 		$query->bindParam(":user_id", $user_id, PDO::PARAM_STR, 255);
 		$query->execute();
