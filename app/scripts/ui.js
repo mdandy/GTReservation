@@ -4,6 +4,7 @@
  * @param {string} func [Optional] Any function name to be executed after the page is loaded
  * @param {string} arg [Optional] Any function argument to be passed
  */
+
 function nextPage(page, func, arg)
 {
 	$.mobile.changePage("#" + page, {
@@ -44,15 +45,24 @@ function prevPage(page, func, arg)
  * Load reservation detail.
  * @param {string} reservationID The reservation ID
  */
-function loadReservationDetail(reservationID)
+function loadReservationDetail(currTime, currCourt, currDate)
 {
-	$("#reservation_detail.page_content").html("<p>Load Reservation Detail: " + reservationID + "</p>");	
+	var template = "";
+	template+= "<h3><span class='reservation_court'>" + 'Court ' + currCourt + "</span></h3>";
+	template+= "<h3><span class='label'>Date: </span><span class='date'>" + currDate + "</span></h3>";
+	template+= "<h3><span class='label'>Time: </span><span class='time'>" + currTime + "</span></h3>";
+	$("#reservation_detail .page_content #profile .description").html(template);	
 }
 
 function generateTable(data) {
+
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var count;
 	var hour = 0;
+	var rcount = 0;
+	if (data != null) {
+		var numRes = data.reservation.length;
+	}
 	if (day > 5) { // It is a Saturday or Sunday
 		count = 14;
 	}
@@ -90,20 +100,53 @@ function generateTable(data) {
 	template += "<div id='grid_header'>";
 	template += "<div class='ui-grid-d'>";
 	template += "<div class='grid_cell_header ui-block-a'></div>";
-	template += "<div class='grid_cell_header ui-block-b'>Court 1</div>";
-	template += "<div class='grid_cell_header ui-block-c'>Court 2</div>";
-	template += "<div class='grid_cell_header ui-block-d'>Court 3</div>";
-	template += "<div class='grid_cell_header ui-block-e'>Court 4</div>";
+	template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
+	template += "<div class='grid_cell_header ui-block-c' style='cursor:auto'>Court 2</div>";
+	template += "<div class='grid_cell_header ui-block-d' style='cursor:auto'>Court 3</div>";
+	template += "<div class='grid_cell_header ui-block-e' style='cursor:auto'>Court 4</div>";
 	template += "</div>";
 	template += "</div>";
 	for (i = 0; i <= count; i++) {
 		template += "<div class='ui-grid-d'>";
 		if(i>=hour) {
 			template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
-			template += "<div class='grid_cell ui-block-b'></div>";
-			template += "<div class='grid_cell ui-block-c'></div>";
-			template += "<div class='grid_cell ui-block-d'></div>";
-			template += "<div class='grid_cell ui-block-e'></div>";
+			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) 
+					&& data.reservation[rcount].court_number == 1 && 
+					Date.parse(data.reservation[rcount].time).getDay() == day){
+				template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+				rcount++;
+			}
+			else{
+					template += "<div class='grid_cell ui-block-b' onclick='createNewReservation(" + 1 + ',' 
+					+ i + ")" + "'></div>";
+			}
+			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+					&& data.reservation[rcount].court_number == 2 && 
+					Date.parse(data.reservation[rcount].time).getDay() == day){
+				template += "<div class='grid_cell ui-block-c' style='cursor:auto'>X</div>";
+				rcount++;
+			}
+			else{
+					template += "<div class='grid_cell ui-block-c'></div>";
+			}
+			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+					&& data.reservation[rcount].court_number == 3 && 
+					Date.parse(data.reservation[rcount].time).getDay() == day){
+				template += "<div class='grid_cell ui-block-d' style='cursor:auto'>X</div>";
+				rcount++;
+			}
+			else{
+					template += "<div class='grid_cell ui-block-d'></div>";
+			}
+			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+					&& data.reservation[rcount].court_number == 4 && 
+					Date.parse(data.reservation[rcount].time).getDay() == day){
+				template += "<div class='grid_cell ui-block-e' style='cursor:auto'>X</div>";
+				rcount++;
+			}
+			else{
+					template += "<div class='grid_cell ui-block-e'></div>";
+			}			
 		}
 		else {
 			template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
@@ -118,20 +161,18 @@ function generateTable(data) {
 }
 
 function getResData() {// Handler for .ready() called.
-	//var query = {court_number : 1, start_time : phpDate};
-	var kevin = 1;
+	var court_number = -1;
     $.ajax({
     		type: "GET",
-            url: "api/reservation/" + kevin + "?start_time=" + phpDate,
+            url: "api/reservation/" + court_number + "?start_time=" + Date.parse(phpDate).clearTime(),
             dataType: "json",
-            //data: query,
             success: function(data, textStatus, jqXHR) {
-            		generateTable();
+            		generateTable(data);
             		console.log(data);
                    // $('#grid_body').tmpl(data).appendTo("#menuicons");
             },
             error: function(data, textStatus, jqXHR) {
-            		generateTable();
+            		generateTable(data);
                     console.log("Data= " + data);
                     console.log("Error code= " + textStatus);
             }
@@ -139,10 +180,9 @@ function getResData() {// Handler for .ready() called.
 };
 
 function getMyReservations() {// Handler for .ready() called.
-	var user_id = 'kjohnstone6'; // HARD CODED
     $.ajax({
     		type: "GET",
-            url: "api/reservation/" + user_id,
+            url: "api/reservation/active",
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
             		console.log(data);
@@ -157,15 +197,27 @@ function getMyReservations() {// Handler for .ready() called.
 
 function generateMyReservations(data) {
 	var i;
+	var currentDay = "not equal";
+	var currTime;
+	var currCourt;
+	var currDate;
 	var template = "";	
 	//template += "<ul data-role='listview' id = 'list' data-theme='g'>";
 	for (i = 0; i < data.reservation.length; i++) {
-		template += "<li data-role=list-divider>" + data.reservation[i].time + "</li>";
+		currTime = Date.parse(data.reservation[i].time).toString('hh:mm tt');
+		currCourt = data.reservation[i].court_number;
+		currDate = Date.parse(data.reservation[i].time).toString("ddd MMM d yyyy");
+		if (currentDay != Date.parse(data.reservation[i].time).getDay()) {
+			template += "<li data-role=list-divider>" + Date.parse(data.reservation[i].time).toString("ddd MMM d yyyy") + "</li>";
+			currentDay = Date.parse(data.reservation[i].time).getDay();
+		}
 		template += "<li>";
-		template += "<a onclick=\"nextPage('reservation_detail', 'loadReservationDetail', '1000AM')\">";
+//		template += "<a onclick=\"nextPage('reservation_detail', 'loadReservationDetail', 'currTime')\">";
+		template += "<a onclick=\"nextPage('reservation_detail'); loadReservationDetail(" 
+			 + "'" + currTime + "'" + ',' + currCourt + ',' + "'" + currDate + "'" + ")\">";
 		template += "<img class='image' src='images/buzz.gif' title='sample'/>";
-		template += "<h3><span class='court'>" + 'Court 1' + "</span></h3>";
-		template += "<h3><span class='time'>" + '10:00 AM' + "</span></h3>";
+		template += "<h3><span class='court'>" + 'Court ' + data.reservation[i].court_number  + "</span></h3>";
+		template += "<h3><span class='time'>" + Date.parse(data.reservation[i].time).toString('hh:mm tt') + "</span></h3>";
 		template += "</a>";
 		template += "</li>";
 	}
@@ -173,4 +225,22 @@ function generateMyReservations(data) {
 	
 	$("#my_reservations .page_content #myResList").html(template);
 	$("#myResList").listview("refresh");
+}
+
+function createNewReservation(court, time) {
+	time = Date.parse(phpDate).clearTime().addHours(time+6).toString('yyyy-MM-dd HH:mm:ss');
+	var query = {court_number:court, start_time:time};
+    $.ajax({
+    	type: "POST",
+    	url: "api/reservation",
+    	data: query,
+    	dataType: "text",
+    	success: function(data, textStatus, jqXHR) {
+    		console.log(data);
+    	},
+    	error: function(data, textStatus, jqXHR) {
+    		console.log("Data= " + data);
+    		console.log("Error code= " + textStatus);
+    	}
+});
 }
