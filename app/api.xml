@@ -14,7 +14,7 @@
 			<action file='server/reservation.php'><![CDATA[
 				date_default_timezone_set('UTC');
 				$now = date("Y-m-d H:00:00");	// YYYY-MM-DD HH:MM:SS UTC
-				echo get_all_reservations(1, $now);
+				echo get_all_reservations(-1, $now);
 			]]></action>
 		</index>
         
@@ -24,19 +24,24 @@
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
 				$arg = $_REST["reservation"];
-				if (is_numeric($arg))
+				if ($arg == 'active')
+					echo get_reservations_by_active_user();
+				else
 				{
-					$court_id = intval($arg);
-					if (isset($_GET['interval']))
+					if (is_numeric($arg))
 					{
-						$interval = intval($_GET['interval']);
-						echo get_reservations_by_time($court_id, $_GET['start_time'], $interval);
+						$court_id = intval($arg);
+						if (isset($_GET['interval']))
+						{
+							$interval = intval($_GET['interval']);
+							echo get_reservations_by_time($court_id, $_GET['start_time'], $interval);
+						}
+						else
+							echo get_reservations_by_time($court_id, $_GET['start_time']);
 					}
 					else
-						echo get_reservations_by_time($court_id, $_GET['start_time']);
+						echo get_reservations_by_user_id($arg);
 				}
-				else
-					echo get_reservations_by_user_id($arg);
 			]]></action>
 		</get>
 		
@@ -46,7 +51,8 @@
 				the user can only reserve up to 48 hours in advance.
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
-				echo create_reservation($_POST['user_id'], $_POST['court_number'], $_POST['start_time']);
+				$court_number = intval($_POST['court_number']);
+				echo create_reservation($court_number, $_POST['start_time']);
 			]]></action>
 		</post>
 		
@@ -69,13 +75,17 @@
 				if (isset($_GET['reservation_id']))
 					echo cancel_reservation_by_id($_REST['reservation_id']);
 				else if (isset($_GET['court_number']))
-					echo cancel_reservations_by_time($_REST['court_number'], $_REST['start_time'],$_REST['interval']);
+				{
+					$court_number = intval($_POST['court_number']);
+					$interval = intval($_REST['interval']);
+					echo cancel_reservations_by_time($court_number, $_REST['start_time'], $interval);
+				}
 			]]></action>
 		</delete>
 	</command>
 	
 	
-	<command id='user' security='public'>
+	<command id='user' security='protected'>
 		<description><![CDATA[This API lets to get information about current active user]]></description>
 		
 		<index>
