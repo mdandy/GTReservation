@@ -53,3 +53,10 @@ authentication, GT directory, and student information.
 * PHP Manual - <http://www.php.net/manual/en/> 
 * PHP PDO Manual - <http://php.net/manual/en/book.pdo.php>
 * GTmob - <http://gtmob.gatech.edu/drupal/apis>
+
+##Note
+
+GTReservation is not a standalone application. It requires 
+<a href="http://gtmob.gatech.edu/drupal/apis">GTmob</a> platform to function 
+properly. You can view GTReservation at 
+<http://m2.cip.gatech.edu/d/maven/w/GTReservation/c/>.
