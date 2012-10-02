@@ -21,7 +21,7 @@ class DAL {
         self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       }
       catch(PDOException $e) {
-        // echo ("Error: " . $e->getMessage());
+        echo ("Error: " . $e->getMessage());
         return false;
       }
     }
@@ -57,7 +57,7 @@ class DAL {
 	  return $isSuccessful;
     }
     catch(PDOException $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return false;
   }
@@ -79,11 +79,25 @@ class DAL {
 	  return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (PDOException $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return NULL;
   }
-
+  
+  public static function is_user_exist($user_id) {
+	try {
+		$query = self::$dbh->prepare("SELECT count(*) FROM Users WHERE user_id=:user_id");
+		$query->bindParam(":user_id", $user_id, PDO::PARAM_STR, 255);
+		$query->execute();
+		if ($query->fetchColumn() > 0)
+			return true;
+	}
+	catch(PDOException $e) {
+		echo ("Error: " . $e->getMessage());
+	}
+	return false; 
+  }
+  
   /*
    * Deletes a user when specifying the user_id.
    */
@@ -96,7 +110,7 @@ class DAL {
       return $isSuccessful;
     }
     catch(PDOEXception $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return false;
   }
@@ -121,7 +135,7 @@ class DAL {
 	  return $reservation_id;
     }
     catch(PDOException $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return -1;
   }
@@ -154,7 +168,8 @@ class DAL {
 		}
 		
 		$query = self::$dbh->prepare($sql);
-		$query->bindParam(":court_id", $court_id, PDO::PARAM_INT);
+		if ($court_id >= 1 && $court_id <=5)
+			$query->bindParam(":court_id", $court_id, PDO::PARAM_INT);
 		$query->bindParam(":start_time", $start_time);
 		if ($interval > 0)
 			$query->bindParam(":end_time", $end_time);
@@ -163,7 +178,7 @@ class DAL {
 		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	catch(PDOException $e) {
-		//echo ("Error: " . $e->getMessage());
+		echo ("Error: " . $e->getMessage());
 	}
 	return NULL;
   }
@@ -178,7 +193,7 @@ class DAL {
 		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	catch(PDOException $e) {
-		//echo ("Error: " . $e->getMessage());
+		echo ("Error: " . $e->getMessage());
 	}
 	return NULL;
   }
@@ -192,7 +207,7 @@ class DAL {
 	  return $isSuccessful;
     }
     catch(PDOException $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return false; 
   }
@@ -218,7 +233,7 @@ class DAL {
 	  return $isSuccessful;
     }
     catch(PDOException $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return false; 
   }
@@ -234,7 +249,7 @@ class DAL {
 	  return $isSuccessful;
     }
     catch(PDOException $e) {
-      //echo ("Error: " . $e->getMessage());
+      echo ("Error: " . $e->getMessage());
     }
     return false; 
   }

@@ -1,6 +1,7 @@
 <?php
 
 require_once("dal.php");
+require_once("user.php");
 
 /**
  * Normalize date to YYYY-MM-DD HH:MM:SS format.
@@ -28,6 +29,9 @@ function create_reservation($user_id, $court_number, $start_time)
 	$start_time = __normalize_date($start_time);
 	if ($start_time == NULL)
 		return NULL;
+		
+	// Register user just-in-case
+	add_user($user_id);
 		
 	DAL::connect();
 	$reservation_id = DAL::insert_reservation($user_id, $court_number, $start_time);
