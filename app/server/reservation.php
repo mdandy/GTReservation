@@ -19,20 +19,21 @@ function __normalize_date($date)
 /**
  * Create a reservation for CRC court. The interval of reservation is one hour and
  * the user can only reserve up to 48 hours in advance.
- * @param $user_id The user ID
  * @param $court_number The court number to be reserved
  * @param $start_time The reservation time in YYYY-MM-DD HH:MM:SS UTC format
  * @return The reservation has been made
  */
-function create_reservation($user_id, $court_number, $start_time)
+function create_reservation($court_number, $start_time)
 {
+	echo ("create_reservation : \n");
 	$start_time = __normalize_date($start_time);
 	if ($start_time == NULL)
 		return NULL;
-		
+	
 	// Register user just-in-case
+	$user_id = get_active_user();
 	add_user($user_id);
-		
+	
 	DAL::connect();
 	$reservation_id = DAL::insert_reservation($user_id, $court_number, $start_time);
 	DAL::disconnect();
@@ -130,8 +131,6 @@ function get_all_reservations($court_number, $start_time)
  */
 function get_reservations_by_user_id($user_id)
 {
-	$result = array("reservation_id" => "-1");
-	
 	DAL::connect();
 	$data = DAL::get_reservations_by_user_id($user_id);
 	DAL::disconnect();
@@ -153,6 +152,12 @@ function get_reservations_by_user_id($user_id)
 		"reservation" => $reservations
 	);
 	return json_encode($result);
+}
+
+function get_reservations_by_active_user()
+{
+	$user_id = get_active_user();
+	return get_reservations_by_user_id($user_id);
 }
 
 /**
