@@ -127,20 +127,31 @@ class DAL {
   }
 
   public static function get_reservations($court_id, $reserve_time, $interval=0) {
-    try {
-		if ($court_id < 1 || $court_id > 5)
-	  		return;	
-		
+    try {	
 		$end_time = new DateTime($reserve_time);
 		$end_time->modify("+$interval hours");
 		$start_time = $reserve_time;
 		$end_time = $end_time->format("Y-m-d H:i:s");
 		
-		$sql = "SELECT * FROM Reservations WHERE Reservations.court_id=:court_id "; 
-		if ($interval > 0)
-			$sql .= " AND reserve_time BETWEEN :start_time AND :end_time";
+		$sql = "";
+		if ($court_id >= 1 && $court_id <=5)
+		{
+			$sql = "SELECT * FROM Reservations WHERE court_id=:court_id "; 
+			if ($interval > 0)
+				$sql .= " AND reserve_time BETWEEN :start_time AND :end_time";
+			else
+				$sql .= " AND reserve_time >= :start_time";
+			$sql .= " ORDER BY reserve_time ASC";
+		}
 		else
-			$sql .= " AND reserve_time >= :start_time";
+		{
+			$sql = "SELECT * FROM Reservations WHERE "; 
+			if ($interval > 0)
+				$sql .= " reserve_time BETWEEN :start_time AND :end_time";
+			else
+				$sql .= " reserve_time >= :start_time";
+			$sql .= " ORDER BY reserve_time ASC";
+		}
 		
 		$query = self::$dbh->prepare($sql);
 		$query->bindParam(":court_id", $court_id, PDO::PARAM_INT);
@@ -160,13 +171,7 @@ class DAL {
   public static function get_reservations_by_user_id($user_id) {
     try {
 		$num_of_court = 5;
-		$sql = "";
-		for ($i = 1; $i <= 5; $i++) {
-			$sql .= "(SELECT * FROM Reservations WHERE court_id=$i AND user_id=:user_id)";
-			if ($i < $num_of_court)
-				$sql .= " UNION ";
-		}
-	
+		$sql = "SELECT * FROM Reservations WHERE user_id=:user_id ORDER BY reserve_time ASC, court_id DESC";
 		$query = self::$dbh->prepare($sql);
 		$query->bindParam(":user_id", $user_id, PDO::PARAM_STR, 255);
 		$query->execute();

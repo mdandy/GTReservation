@@ -14,7 +14,7 @@
 			<action file='server/reservation.php'><![CDATA[
 				date_default_timezone_set('UTC');
 				$now = date("Y-m-d H:00:00");	// YYYY-MM-DD HH:MM:SS UTC
-				echo get_all_reservations(-1, $now);
+				echo get_all_reservations(1, $now);
 			]]></action>
 		</index>
         
@@ -23,12 +23,20 @@
 				Retrieve court reservations.
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
-				if (isset($_REST['user_id']))
-					echo get_reservations_by_user_id($_REST['user_id']);
-				else if (isset($_REST['interval']))
-					echo get_reservations_by_time($_REST['court_number'], $_REST['start_time'], $_REST['interval']);
+				$arg = $_REST["reservation"];
+				if (is_numeric($arg))
+				{
+					$court_id = intval($arg);
+					if (isset($_GET['interval']))
+					{
+						$interval = intval($_GET['interval']);
+						echo get_reservations_by_time($court_id, $_GET['start_time'], $interval);
+					}
+					else
+						echo get_reservations_by_time($court_id, $_GET['start_time']);
+				}
 				else
-					echo get_all_reservations($_REST['court_number'], $_REST['start_time']);
+					echo get_reservations_by_user_id($arg);
 			]]></action>
 		</get>
 		
@@ -58,9 +66,9 @@
 				Cancel reservations.
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
-				if (isset($_REST['reservation_id']))
+				if (isset($_GET['reservation_id']))
 					echo cancel_reservation_by_id($_REST['reservation_id']);
-				else if (isset($_REST['start_time']))
+				else if (isset($_GET['court_number']))
 					echo cancel_reservations_by_time($_REST['court_number'], $_REST['start_time'],$_REST['interval']);
 			]]></action>
 		</delete>

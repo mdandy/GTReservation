@@ -43,7 +43,7 @@ function create_reservation($user_id, $court_number, $start_time)
 			)
 		)
 	);
-	echo json_encode($result);
+	return json_encode($result);
 }
 
 /**
@@ -58,9 +58,8 @@ function cancel_reservation_by_id($reservation_id)
 	DAL::disconnect();
 	
 	if ($isSuccessful)
-		echo "TRUE";
-	else
-		echo "FALSE";
+		return "TRUE";
+	return "FALSE";
 }
 
 /**
@@ -74,19 +73,15 @@ function cancel_reservations_by_time($court_number, $start_time, $interval = 1)
 {
 	$start_time = __normalize_date($start_time);
 	if ($start_time == NULL)
-	{
-		echo "FALSE";
-		return;
-	}
+		return "FALSE";
 	
 	DAL::connect();
 	$isSuccessful = DAL::delete_reservation_by_time($start_time, $interval);
 	DAL::disconnect();
 	
 	if ($isSuccessful)
-		echo "TRUE";
-	else
-		echo "FALSE";
+		return "TRUE";
+	return "FALSE";
 }
 
 /**
@@ -121,7 +116,7 @@ function get_all_reservations($court_number, $start_time)
 	$result = array(
 		"reservation" => $reservations
 	);
-	echo json_encode($result);
+	return json_encode($result);
 }
 
 /**
@@ -153,17 +148,17 @@ function get_reservations_by_user_id($user_id)
 	$result = array(
 		"reservation" => $reservations
 	);
-	echo json_encode($result);
+	return json_encode($result);
 }
 
 /**
  * Retrieve all reservations that have been made at a particular time frame.
  * @param $court_number The court number to be reserved or -1 to retrieve all court reservations
  * @param $start_time The reservation starting time in YYYY-MM-DD HH:MM:SS UTC format
- * @param $interval The time interval (in an increment of one hour)
+ * @param $interval [Optional] The time interval (in an increment of one hour)
  * @return The reservation information in JSON format
  */
-function get_reservations_by_time($court_number, $start_time, $interval)
+function get_reservations_by_time($court_number, $start_time, $interval=0)
 {
 	$start_time = __normalize_date($start_time);
 	if ($start_time == NULL)
@@ -189,7 +184,7 @@ function get_reservations_by_time($court_number, $start_time, $interval)
 	$result = array(
 		"reservation" => $reservations
 	);
-	echo json_encode($result);
+	return json_encode($result);
 }
 
 ?>
