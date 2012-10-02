@@ -45,16 +45,19 @@ function prevPage(page, func, arg)
  * Load reservation detail.
  * @param {string} reservationID The reservation ID
  */
-function loadReservationDetail(currTime, currCourt, currDate)
+function loadReservationDetail(currTime, currCourt, currDate, reservation_id)
 {
 	var template = "";
 	template+= "<h3><span class='label'>Court: </span><span class='reservation_court' id = 'myCourt'>" + currCourt + "</span></h3>";
-	template+= "<h3><span class=label'>Date: </span><span class='date' id = 'myDate'>" + currDate + "</span></h3>";
+	template+= "<h3><span class='label'>Date: </span><span class='date' id = 'myDate'>" + currDate + "</span></h3>";
 	template+= "<h3><span class='label'>Time: </span><span class='time' id = 'myTime'>" + currTime + "</span></h3>";
+	template+= "<input type='hidden' id = 'myResID' value='" + reservation_id + "'/>";
 	$("#reservation_detail .page_content #profile .description").html(template);	
 }
 
 function dialog(court, time){
+	temp = phpDate; // avoid clearing phpDate
+	displayTime = Date.parse(temp).clearTime().addHours(time+6).toString("ddd MMM d yyyy hh:mm tt");
 		  // NOTE: The selector can be whatever you like, so long as it is an HTML element.
 		  //       If you prefer, it can be a member of the current page, or an anonymous div
 		  //       like shown.
@@ -62,12 +65,13 @@ function dialog(court, time){
 		    mode: 'button',
 		    headerText: 'Confirm',
 		    headerClose: false,
-		    //buttonPrompt: 'Please Choose One',
+		    buttonPrompt: 'Reserve Court ' + court + ' at ' + displayTime,
 		    buttons : {
 		      'OK': {
 		        click: function () { 
 		          $('#buttonoutput').text('OK');
 		          createNewReservation(court, time);
+		          getResData(); // regenerate table
 		        }
 		      },
 		      'Cancel': {
@@ -88,8 +92,9 @@ function generateTable(data) {
 	var count;
 	var hour = 0;
 	var rcount = 0;
+	var numRes = 0;
 	if (data != null) {
-		var numRes = data.reservation.length;
+		numRes = data.reservation.length;
 	}
 	if (day > 5) { // It is a Saturday or Sunday
 		count = 14;
@@ -192,18 +197,28 @@ function generateTable(data) {
 }
 
 function getResData() {// Handler for .ready() called.
+	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var court_number = -1;
+	var zeroHourDate = phpDate;
+	var numHours = Date.parse(zeroHourDate).getHours();
+	var d = new Date();
+	
+	if(day == d.getDay()) { // if today keep current hours
+		zeroHourDate = Date.parse(zeroHourDate).clearTime().addHours(numHours);
+	}
+	else { // diff day clear hours go to 00:00
+		zeroHourDate = Date.parse(zeroHourDate).clearTime();
+	}
+	
     $.ajax({
     		type: "GET",
-            url: "api/reservation/" + court_number + "?start_time=" + Date.parse(phpDate).clearTime(),
+            url: "api/reservation/" + court_number + "?start_time=" + zeroHourDate.toString('yyyy-MM-dd HH:mm:ss'),
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
             		generateTable(data);
             		console.log(data);
-                   // $('#grid_body').tmpl(data).appendTo("#menuicons");
             },
             error: function(data, textStatus, jqXHR) {
-            		generateTable(data);
                     console.log("Data= " + data);
                     console.log("Error code= " + textStatus);
             }
@@ -238,13 +253,14 @@ function generateMyReservations(data) {
 		currTime = Date.parse(data.reservation[i].time).toString('hh:mm tt');
 		currCourt = data.reservation[i].court_number;
 		currDate = Date.parse(data.reservation[i].time).toString("ddd MMM d yyyy");
+		currID = data.reservation[i].reservation_id;
 		if (currentDay != Date.parse(data.reservation[i].time).getDay()) {
 			template += "<li data-role=list-divider>" + Date.parse(data.reservation[i].time).toString("ddd MMM d yyyy") + "</li>";
 			currentDay = Date.parse(data.reservation[i].time).getDay();
 		}
 		template += "<li>";
 		template += "<a onclick=\"nextPage('reservation_detail'); loadReservationDetail(" 
-			 + "'" + currTime + "'" + ',' + currCourt + ',' + "'" + currDate + "'" + ")\">";
+			 + "'" + currTime + "'" + ',' + currCourt + ',' + "'" + currDate + "'" + ',' + currID + ")\">";
 		template += "<img class='image' src='images/buzz.gif' title='sample'/>";
 		template += "<h3><span class='court'>" + 'Court ' + data.reservation[i].court_number  + "</span></h3>";
 		template += "<h3><span class='time'>" + Date.parse(data.reservation[i].time).toString('hh:mm tt') + "</span></h3>";
@@ -258,7 +274,8 @@ function generateMyReservations(data) {
 }
 
 function createNewReservation(court, time) {
-	time = Date.parse(phpDate).clearTime().addHours(time+6).toString('yyyy-MM-dd HH:mm:ss');
+	temp = phpDate; // avoid clearing phpDate
+	time = Date.parse(temp).clearTime().addHours(time+6).toString('yyyy-MM-dd HH:mm:ss');
 	var query = {court_number:court, start_time:time};
     $.ajax({
     	type: "POST",
@@ -276,20 +293,15 @@ function createNewReservation(court, time) {
 }
 
 function cancelReservation() {
-	//court = $("#reservation_detail .page_content #profile .description .reservation_court");
-	court = document.getElementById('myCourt').innerHTML;
-	time = Date.parse(document.getElementById('myTime').innerHTML).toString('yyyy-MM-dd HH:mm:ss');
-//	template+= "<h3><span class='label'>Court: "  </span><span class='reservation_court'> + currCourt + "</span></h3>";
-//	template+= "<h3><span class=label'>Date: </span><span class='date'>" + currDate + "</span></h3>";
-//	template+= "<h3><span class='label'>Time: </span><span class='time'>" + currTime + "</span></h3>";
-	//time = Date.parse(phpDate).clearTime().addHours(time+6).toString('yyyy-MM-dd HH:mm:ss');
-	console.log("court: " + court + "time: " + time);
-	var query = {court_number:court, start_time:time};
+	//court = document.getElementById('myCourt').innerHTML;
+	//time = Date.parse(document.getElementById('myTime').innerHTML).toString('yyyy-MM-dd HH:mm:ss');
+	var resID = document.getElementById('myResID').value;
+	console.log("resID: " + resID);
+	var query = {reservation_id:resID};
     $.ajax({
     	type: "DELETE",
-    	url: "api/reservation",
-    	data: query,
-    	dataType: "json",
+    	url: "api/reservation?reservation_id=" + resID,
+    	dataType: "text",
     	success: function(data, textStatus, jqXHR) {
     		console.log(data);
     	},
