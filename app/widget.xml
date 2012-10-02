@@ -10,8 +10,10 @@
 	<javascript file="scripts/date.js"/>
 	<javascript file="scripts/courtChange.js"/>
 	<css file="css/style.css" />
+	<css file="css/jquery.mobile.simpledialog.min.css" />
 	
     <html file="index.html"/>
-	
-	<library name="jquery.mobile" /> 
+	<library name="jquery.mobile" />
+	<javascript file="scripts/jquery.mobile.simpledialog2.min.js"/>
+	 
 </widget>

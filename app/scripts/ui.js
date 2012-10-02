@@ -48,10 +48,38 @@ function prevPage(page, func, arg)
 function loadReservationDetail(currTime, currCourt, currDate)
 {
 	var template = "";
-	template+= "<h3><span class='reservation_court'>" + 'Court ' + currCourt + "</span></h3>";
-	template+= "<h3><span class='label'>Date: </span><span class='date'>" + currDate + "</span></h3>";
-	template+= "<h3><span class='label'>Time: </span><span class='time'>" + currTime + "</span></h3>";
+	template+= "<h3><span class='label'>Court: </span><span class='reservation_court' id = 'myCourt'>" + currCourt + "</span></h3>";
+	template+= "<h3><span class=label'>Date: </span><span class='date' id = 'myDate'>" + currDate + "</span></h3>";
+	template+= "<h3><span class='label'>Time: </span><span class='time' id = 'myTime'>" + currTime + "</span></h3>";
 	$("#reservation_detail .page_content #profile .description").html(template);	
+}
+
+function dialog(court, time){
+		  // NOTE: The selector can be whatever you like, so long as it is an HTML element.
+		  //       If you prefer, it can be a member of the current page, or an anonymous div
+		  //       like shown.
+		  $('<div>').simpledialog2({
+		    mode: 'button',
+		    headerText: 'Confirm',
+		    headerClose: false,
+		    //buttonPrompt: 'Please Choose One',
+		    buttons : {
+		      'OK': {
+		        click: function () { 
+		          $('#buttonoutput').text('OK');
+		          createNewReservation(court, time);
+		        }
+		      },
+		      'Cancel': {
+		        click: function () { 
+		          $('#buttonoutput').text('Cancel');
+		          
+		        },
+		        icon: "delete",
+		        theme: "c"
+		      }
+		    }
+		  });
 }
 
 function generateTable(data) {
@@ -117,7 +145,7 @@ function generateTable(data) {
 				rcount++;
 			}
 			else{
-					template += "<div class='grid_cell ui-block-b' onclick='createNewReservation(" + 1 + ',' 
+					template += "<div class='grid_cell ui-block-b' onclick='dialog(" + 1 + ',' 
 					+ i + ")" + "'></div>";
 			}
 			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
@@ -127,7 +155,8 @@ function generateTable(data) {
 				rcount++;
 			}
 			else{
-					template += "<div class='grid_cell ui-block-c'></div>";
+				template += "<div class='grid_cell ui-block-c' onclick='dialog(" + 2 + ',' 
+				+ i + ")" + "'></div>";
 			}
 			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
 					&& data.reservation[rcount].court_number == 3 && 
@@ -136,7 +165,8 @@ function generateTable(data) {
 				rcount++;
 			}
 			else{
-					template += "<div class='grid_cell ui-block-d'></div>";
+				template += "<div class='grid_cell ui-block-d' onclick='dialog(" + 3 + ',' 
+				+ i + ")" + "'></div>";
 			}
 			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
 					&& data.reservation[rcount].court_number == 4 && 
@@ -145,7 +175,8 @@ function generateTable(data) {
 				rcount++;
 			}
 			else{
-					template += "<div class='grid_cell ui-block-e'></div>";
+				template += "<div class='grid_cell ui-block-e' onclick='dialog(" + 4 + ',' 
+				+ i + ")" + "'></div>";
 			}			
 		}
 		else {
@@ -212,7 +243,6 @@ function generateMyReservations(data) {
 			currentDay = Date.parse(data.reservation[i].time).getDay();
 		}
 		template += "<li>";
-//		template += "<a onclick=\"nextPage('reservation_detail', 'loadReservationDetail', 'currTime')\">";
 		template += "<a onclick=\"nextPage('reservation_detail'); loadReservationDetail(" 
 			 + "'" + currTime + "'" + ',' + currCourt + ',' + "'" + currDate + "'" + ")\">";
 		template += "<img class='image' src='images/buzz.gif' title='sample'/>";
@@ -235,6 +265,31 @@ function createNewReservation(court, time) {
     	url: "api/reservation",
     	data: query,
     	dataType: "text",
+    	success: function(data, textStatus, jqXHR) {
+    		console.log(data);
+    	},
+    	error: function(data, textStatus, jqXHR) {
+    		console.log("Data= " + data);
+    		console.log("Error code= " + textStatus);
+    	}
+});
+}
+
+function cancelReservation() {
+	//court = $("#reservation_detail .page_content #profile .description .reservation_court");
+	court = document.getElementById('myCourt').innerHTML;
+	time = Date.parse(document.getElementById('myTime').innerHTML).toString('yyyy-MM-dd HH:mm:ss');
+//	template+= "<h3><span class='label'>Court: "  </span><span class='reservation_court'> + currCourt + "</span></h3>";
+//	template+= "<h3><span class=label'>Date: </span><span class='date'>" + currDate + "</span></h3>";
+//	template+= "<h3><span class='label'>Time: </span><span class='time'>" + currTime + "</span></h3>";
+	//time = Date.parse(phpDate).clearTime().addHours(time+6).toString('yyyy-MM-dd HH:mm:ss');
+	console.log("court: " + court + "time: " + time);
+	var query = {court_number:court, start_time:time};
+    $.ajax({
+    	type: "DELETE",
+    	url: "api/reservation",
+    	data: query,
+    	dataType: "json",
     	success: function(data, textStatus, jqXHR) {
     		console.log(data);
     	},
