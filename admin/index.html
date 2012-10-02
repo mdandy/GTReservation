@@ -1,0 +1,84 @@
+<!-- Main Menu -->
+<div data-role="page" id="home_page">
+    <div data-role='header' data-position='inline' data-theme='d'>
+	    <!--a onclick="login()" data-icon='alert' data-transition="pop">GTLogin</a>-->
+	    <h1>CRC Court Reservation</h1>
+   	</div>
+	
+	<div class="page_content" data-role="content">
+		<a onclick="nextPage('view_reservations', 'todaysDate')" data-role="button" data-icon="star">View Reservations</a>
+		<a onclick="nextPage('search_reservations', '')" data-role="button" data-icon="search">Search Reservations</a>
+		<a onclick="nextPage('cancel_reservations', 'init_cancel_reservation_form')" data-role="button" data-icon="delete">Cancel Reservations</a>
+	</div>
+</div>
+
+<!-- View Reservations -->
+
+<div data-role="page" id="view_reservations">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
+		<h1>CRC Court Reservation</h1>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
+	</div>
+	<div class="page_content" data-role="content">
+		<div id="container">
+			<div id="menu">
+				<a class="button_left" id="prevDate" onclick="prevDate()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
+				<a class="button_right" id="nextDate" onclick="nextDate();" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
+				<h2 id ="dateRes"> 25/09/2012 </h2>
+				<a class="button_left" onclick="changeCourt()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
+				<a class="button_right" onclick="changeCourt()" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
+				<h2 id="court">Racquetball Court</h2>
+			</div>
+			<div id="grid_header">
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Search Reservation -->
+
+<div data-role="page" id="search_reservations">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
+		<h1>CRC Court Reservation - Search</h1>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
+	</div>
+	<div class="page_content" data-role="content">
+		<div id="search_form">
+			<input type="search" name="user_id" id="user_id" value="GT User name" />
+		</div>
+	</div>
+</div>
+
+<!-- Cancel Reservation -->
+
+<div data-role="page" id="cancel_reservations">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
+		<h1>CRC Court Reservation - Cancel</h1>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
+	</div>
+	<div class="page_content" data-role="content">
+		<div id="cancel_form">
+			<label for="user_id"><p class="bold_label">GT User name:</p></label>
+    		<input type="text" name="user_id" id="user_id" value=""  />
+			
+			<a onclick="cancelReservation()" data-role="button" data-icon="delete">Cancel Reservation</a>
+			<div class="cushion"></div>
+			<hr />
+			<div class="cushion"></div>
+			
+			<p class="bold_label">From:</p>
+			<input name="from_date" id="from_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
+			<input name="from_time" id="from_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			
+			
+			<p class="bold_label">To:</p>
+			<input name="to_date" id="to_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
+			<input name="to_time" id="to_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			
+			<a onclick="cancelReservation()" data-role="button" data-icon="delete">Cancel Reservation</a>
+		</div>
+	</div>
+</div>
