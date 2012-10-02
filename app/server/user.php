@@ -32,4 +32,10 @@ function delete_user($user_id)
 	return "FALSE";
 }
 
+function get_active_user()
+{
+	global $_USER;
+	return $_USER['uid'];
+}
+
 ?>

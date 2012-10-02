@@ -5,7 +5,7 @@
 	</description>
 	
 	<command id='reservation' security='public'>
-		<description><![CDATA[This simple API lets you do something simple]]></description>
+		<description><![CDATA[This API lets you to reserve a court and retrieve reservation information]]></description>
 		
 		<index>
 			<description><![CDATA[
@@ -72,5 +72,19 @@
 					echo cancel_reservations_by_time($_REST['court_number'], $_REST['start_time'],$_REST['interval']);
 			]]></action>
 		</delete>
+	</command>
+	
+	
+	<command id='user' security='public'>
+		<description><![CDATA[This API lets to get information about current active user]]></description>
+		
+		<index>
+			<description><![CDATA[
+				Retrieve active user.
+			]]></description>
+			<action file='server/user.php'><![CDATA[
+				echo get_active_user();
+			]]></action>
+		</index>
 	</command>
 </api>

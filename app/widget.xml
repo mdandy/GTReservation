@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding = "utf-8" ?>
-<widget title="CRC Court Reservation">
+<!--<widget title="CRC Court Reservation" security="protected">-->
+<widget title="CRC Court Reservation" security="public">
     <!-- DO NOT CHANGE THE ORDER!!! -->
 	<library name="jquery" />
     <library name="gtmob" />
