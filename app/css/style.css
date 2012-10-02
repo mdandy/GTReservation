@@ -126,3 +126,7 @@
 {
 	background: #F28080;
 }
+
+#create_reservations .page_content #container .ui-grid-d .g {
+    background: #A9A9A9;
+}

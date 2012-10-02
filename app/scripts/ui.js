@@ -49,20 +49,27 @@ function loadReservationDetail(reservationID)
 	$("#reservation_detail.page_content").html("<p>Load Reservation Detail: " + reservationID + "</p>");	
 }
 
-function generateTable(time, isReserved, isAvailable, reservation_id) {
-	//Date.parse(Date.today()).getDay();
+function generateTable(data) {
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var count;
+	var hour = 0;
 	if (day > 5) { // It is a Saturday or Sunday
 		count = 14;
 	}
 	else {
 		count = 16;
 	}
+	
 	var template = "";
 	var i;
 	var times = new Array();
-	//TODO: Change to stop at 8 pm on Saturday-Sunday
+	var d = new Date();
+	
+	if(day == d.getDay())
+	{
+		hour = d.getHours() - 6; // account for military time
+	}
+	
 	times[0] = "6:00 AM";
 	times[1] = "7:00 AM";
 	times[2] = "8:00 AM";
@@ -91,12 +98,79 @@ function generateTable(time, isReserved, isAvailable, reservation_id) {
 	template += "</div>";
 	for (i = 0; i <= count; i++) {
 		template += "<div class='ui-grid-d'>";
-		template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
-		template += "<div class='grid_cell ui-block-b'></div>";
-		template += "<div class='grid_cell ui-block-c'></div>";
-		template += "<div class='grid_cell ui-block-d'></div>";
-		template += "<div class='grid_cell ui-block-e'></div>";
+		if(i>=hour) {
+			template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
+			template += "<div class='grid_cell ui-block-b'></div>";
+			template += "<div class='grid_cell ui-block-c'></div>";
+			template += "<div class='grid_cell ui-block-d'></div>";
+			template += "<div class='grid_cell ui-block-e'></div>";
+		}
+		else {
+			template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
+			template += "<div class='grid_cell ui-block-b g'></div>";
+			template += "<div class='grid_cell ui-block-c g'></div>";
+			template += "<div class='grid_cell ui-block-d g'></div>";
+			template += "<div class='grid_cell ui-block-e g'></div>";
+		}
 		template += "</div>";
 	}
 	$("#create_reservations .page_content #container #grid_header").html(template);
+}
+
+function getResData() {// Handler for .ready() called.
+	//var query = {court_number : 1, start_time : phpDate};
+	var kevin = 1;
+    $.ajax({
+    		type: "GET",
+            url: "api/reservation/" + kevin + "?start_time=" + phpDate,
+            dataType: "json",
+            //data: query,
+            success: function(data, textStatus, jqXHR) {
+            		generateTable();
+            		console.log(data);
+                   // $('#grid_body').tmpl(data).appendTo("#menuicons");
+            },
+            error: function(data, textStatus, jqXHR) {
+            		generateTable();
+                    console.log("Data= " + data);
+                    console.log("Error code= " + textStatus);
+            }
+    });
+};
+
+function getMyReservations() {// Handler for .ready() called.
+	var user_id = 'kjohnstone6'; // HARD CODED
+    $.ajax({
+    		type: "GET",
+            url: "api/reservation/" + user_id,
+            dataType: "json",
+            success: function(data, textStatus, jqXHR) {
+            		console.log(data);
+            		generateMyReservations(data);
+            },
+            error: function(data, textStatus, jqXHR) {
+                    console.log("Data= " + data);
+                    console.log("Error code= " + textStatus);
+            }
+    });
+};
+
+function generateMyReservations(data) {
+	var i;
+	var template = "";	
+	//template += "<ul data-role='listview' id = 'list' data-theme='g'>";
+	for (i = 0; i < data.reservation.length; i++) {
+		template += "<li data-role=list-divider>" + data.reservation[i].time + "</li>";
+		template += "<li>";
+		template += "<a onclick=\"nextPage('reservation_detail', 'loadReservationDetail', '1000AM')\">";
+		template += "<img class='image' src='images/buzz.gif' title='sample'/>";
+		template += "<h3><span class='court'>" + 'Court 1' + "</span></h3>";
+		template += "<h3><span class='time'>" + '10:00 AM' + "</span></h3>";
+		template += "</a>";
+		template += "</li>";
+	}
+	//template += "</ul>"; // close list
+	
+	$("#my_reservations .page_content #myResList").html(template);
+	$("#myResList").listview("refresh");
 }

@@ -3,12 +3,11 @@
     <div data-role='header' data-position='inline' data-theme='d'>
 	    <a onclick="login()" data-icon='alert' data-transition="pop">GTLogin</a>
 	    <h1>CRC Court Reservation</h1>
-	   <!-- <a href="#" data-icon='add' data-transition="pop">Other</a> -->
    	</div>
 	
 	<div class="page_content" data-role="content">
-		<a onclick="nextPage('my_reservations')" data-role="button" data-icon="star">View My Reservations</a>
-		<a onclick="nextPage('create_reservations', 'todaysDate'); nextPage('create_reservations', 'generateTable')" data-role="button" data-icon="search">Create Reservations</a>
+		<a onclick="nextPage('my_reservations', 'getMyReservations')" data-role="button" data-icon="star">View My Reservations</a>
+		<a onclick="nextPage('create_reservations', 'todaysDate')" data-role="button" data-icon="search">Create Reservations</a>
 	</div>
 </div>
 
@@ -22,7 +21,8 @@
 	</div>
 	
 	<div class="page_content" data-role="content">
-		<ul data-role="listview" data-theme="g">
+		<ul data-role="listview" id = 'myResList' data-theme="g">
+		<!--
 			<li data-role=list-divider>September 17, 2012</li>
 			<li>
 				<a onclick="nextPage('reservation_detail', 'loadReservationDetail', '1000AM')">
@@ -48,6 +48,7 @@
 					<h3><span class="time">02:00 PM</span></h3>
 				</a>
 			</li>
+			-->
 		</ul>
 	</div>
 </div>
@@ -87,37 +88,14 @@
 	<div class="page_content" data-role="content">
 		<div id="container">
 			<div id="menu">
-				<a class="button_left" id = "prevDate" onclick="prevDate(); generateTable();" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
-				<a class="button_right" id = "nextDate" onclick="nextDate(); generateTable();" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
+				<a class="button_left" id = "prevDate" onclick="prevDate()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
+				<a class="button_right" id = "nextDate" onclick="nextDate();" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
 				<h2 id ="dateRes"> 25/09/2012 </h2>
 				<a class="button_left" onclick="changeCourt()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
 				<a class="button_right" onclick="changeCourt()" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
 				<h2 id="court">Racquetball Court</h2>
 			</div>
 			<div id="grid_header">
-				<div class="ui-grid-d">
-					<div class="grid_cell_header ui-block-a"></div>
-					<div class="grid_cell_header ui-block-b">Court 1</div>
-					<div class="grid_cell_header ui-block-c">Court 2</div>
-					<div class="grid_cell_header ui-block-d">Court 3</div>
-					<div class="grid_cell_header ui-block-e">Court 4</div>
-				</div>
-			</div>
-			<div id="grid_body">
-			<div class="ui-grid-d">
-			<!--	<div class="grid_cell ui-block-a">10:00 AM</div>
-				<div class="grid_cell ui-block-b"></div>
-				<div class="grid_cell ui-block-c"></div>
-				<div class="grid_cell ui-block-d"></div>
-				<div class="grid_cell ui-block-e"></div>
-			</div>
-			<div class="ui-grid-d">
-				<div class="grid_cell ui-block-a">11:00 AM</div>
-				<div class="grid_cell ui-block-b"></div>
-				<div class="grid_cell ui-block-c"></div>
-				<div class="grid_cell ui-block-d"></div>
-				<div class="grid_cell ui-block-e"></div> -->
-			</div>
 			</div>
 		</div>
 	</div>
