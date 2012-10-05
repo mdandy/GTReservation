@@ -86,6 +86,38 @@ function dialog(court, time){
 		  });
 }
 
+function dialogCancel(){
+		var dateCancel = document.getElementById('myDate').innerHTML;
+		var timeCancel = document.getElementById('myTime').innerHTML;
+		var courtCancel = document.getElementById('myCourt').innerHTML;
+		  // NOTE: The selector can be whatever you like, so long as it is an HTML element.
+		  //       If you prefer, it can be a member of the current page, or an anonymous div
+		  //       like shown.
+		  $('<div>').simpledialog2({
+		    mode: 'button',
+		    headerText: 'Confirm',
+		    headerClose: false,
+		    buttonPrompt: 'Cancel Reservation on court ' + courtCancel + ' at ' + timeCancel + ' on ' + dateCancel,
+		    buttons : {
+		      'OK': {
+		        click: function () { 
+		          $('#buttonoutput').text('OK');
+		          cancelReservation();
+		          nextPage('my_reservations', 'getMyReservations');
+		        }
+		      },
+		      'Cancel': {
+		        click: function () { 
+		          $('#buttonoutput').text('Cancel');
+		          
+		        },
+		        icon: "delete",
+		        theme: "c"
+		      }
+		    }
+		  });
+}
+
 function generateTable(data) {
 
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
@@ -133,63 +165,93 @@ function generateTable(data) {
 	template += "<div id='grid_header'>";
 	template += "<div class='ui-grid-d'>";
 	template += "<div class='grid_cell_header ui-block-a'></div>";
+	if(document.getElementById("court").innerHTML == "Squash Court"){
+		template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
+	}
+	else{
+
 	template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
 	template += "<div class='grid_cell_header ui-block-c' style='cursor:auto'>Court 2</div>";
 	template += "<div class='grid_cell_header ui-block-d' style='cursor:auto'>Court 3</div>";
 	template += "<div class='grid_cell_header ui-block-e' style='cursor:auto'>Court 4</div>";
+	}
 	template += "</div>";
 	template += "</div>";
 	for (i = 0; i <= count; i++) {
 		template += "<div class='ui-grid-d'>";
-		if(i>=hour) {
-			template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
-			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) 
-					&& data.reservation[rcount].court_number == 1 && 
-					Date.parse(data.reservation[rcount].time).getDay() == day){
-				template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
-				rcount++;
-			}
-			else{
-					template += "<div class='grid_cell ui-block-b' onclick='dialog(" + 1 + ',' 
+		if(document.getElementById("court").innerHTML == "Squash Court"){
+			if(i>=hour){
+				template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) && Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-e' onclick='dialog(" + 5 + ',' 
 					+ i + ")" + "'></div>";
-			}
-			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
-					&& data.reservation[rcount].court_number == 2 && 
-					Date.parse(data.reservation[rcount].time).getDay() == day){
-				template += "<div class='grid_cell ui-block-c' style='cursor:auto'>X</div>";
-				rcount++;
+				}
 			}
 			else{
-				template += "<div class='grid_cell ui-block-c' onclick='dialog(" + 2 + ',' 
-				+ i + ")" + "'></div>";
+				template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
+				template += "<div class='grid_cell ui-block-b g'></div>";
 			}
-			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
-					&& data.reservation[rcount].court_number == 3 && 
-					Date.parse(data.reservation[rcount].time).getDay() == day){
-				template += "<div class='grid_cell ui-block-d' style='cursor:auto'>X</div>";
-				rcount++;
-			}
-			else{
-				template += "<div class='grid_cell ui-block-d' onclick='dialog(" + 3 + ',' 
-				+ i + ")" + "'></div>";
-			}
-			if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
-					&& data.reservation[rcount].court_number == 4 && 
-					Date.parse(data.reservation[rcount].time).getDay() == day){
-				template += "<div class='grid_cell ui-block-e' style='cursor:auto'>X</div>";
-				rcount++;
-			}
-			else{
-				template += "<div class='grid_cell ui-block-e' onclick='dialog(" + 4 + ',' 
-				+ i + ")" + "'></div>";
-			}			
 		}
-		else {
-			template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
-			template += "<div class='grid_cell ui-block-b g'></div>";
-			template += "<div class='grid_cell ui-block-c g'></div>";
-			template += "<div class='grid_cell ui-block-d g'></div>";
-			template += "<div class='grid_cell ui-block-e g'></div>";
+		else{
+			if(i>=hour) {
+				template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) 
+						&& data.reservation[rcount].court_number == 1 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+						template += "<div class='grid_cell ui-block-b' onclick='dialog(" + 1 + ',' 
+						+ i + ")" + "'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 2 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-c' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-c' onclick='dialog(" + 2 + ',' 
+					+ i + ")" + "'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 3 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-d' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-d' onclick='dialog(" + 3 + ',' 
+					+ i + ")" + "'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 4 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-e' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-e' onclick='dialog(" + 4 + ',' 
+					+ i + ")" + "'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 5 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					rcount++;
+				}			
+			}
+			else {
+				template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
+				template += "<div class='grid_cell ui-block-b g'></div>";
+				template += "<div class='grid_cell ui-block-c g'></div>";
+				template += "<div class='grid_cell ui-block-d g'></div>";
+				template += "<div class='grid_cell ui-block-e g'></div>";
+			}
 		}
 		template += "</div>";
 	}
@@ -199,6 +261,8 @@ function generateTable(data) {
 function getResData() {// Handler for .ready() called.
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var court_number = -1;
+	if(document.getElementById('court').innerHTML == 'Squash Court')
+		court_number = 5;
 	var zeroHourDate = phpDate;
 	var numHours = Date.parse(zeroHourDate).getHours();
 	var d = new Date();
@@ -311,3 +375,9 @@ function cancelReservation() {
     	}
 });
 }
+
+
+$('#create_reservations').live('pageshow', function() {
+		todaysDate();
+		getResData();
+});

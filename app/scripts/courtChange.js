@@ -4,7 +4,11 @@ function changeCourt()
 	if(court == "Racquetball Court")
 	{
 		document.getElementById('court').innerHTML = "Squash Court";
+		getResData();
 	}
 	else
+	{
 		document.getElementById('court').innerHTML = "Racquetball Court";
+		getResData();
+	}
 }
