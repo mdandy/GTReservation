@@ -11,6 +11,11 @@ function todaysDate() {
 	getResData();
 	return currDate;
 }
+
+function initPhpDate() {
+	phpDate = Date.today().setTimeToNow().toString("yyyy-MM-dd HH:mm:ss");
+	return phpDate;
+}
 // Will return the previous date of the date the user was currently looking at
 function prevDate(){
 	$('#nextDate').removeClass('ui-disabled');

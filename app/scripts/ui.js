@@ -290,9 +290,12 @@ function getResData() {// Handler for .ready() called.
 };
 
 function getMyReservations() {// Handler for .ready() called.
+	start_time = initPhpDate();
+	court_number = -1;
     $.ajax({
     		type: "GET",
             url: "api/reservation/active",
+            data: {court_number:1, start_time:phpDate},
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
             		console.log(data);
@@ -315,6 +318,9 @@ function generateMyReservations(data) {
 	//template += "<ul data-role='listview' id = 'list' data-theme='g'>";
 	for (i = 0; i < data.reservation.length; i++) {
 		currTime = Date.parse(data.reservation[i].time).toString('hh:mm tt');
+		if (Date.today().getOrdinalNumber() > Date.parse(data.reservation[i].time).getOrdinalNumber()) {  
+			continue;
+		}
 		currCourt = data.reservation[i].court_number;
 		currDate = Date.parse(data.reservation[i].time).toString("ddd MMM d yyyy");
 		currID = data.reservation[i].reservation_id;
@@ -378,6 +384,11 @@ function cancelReservation() {
 
 
 $('#create_reservations').live('pageshow', function() {
-		todaysDate();
+		initPhpDate();
 		getResData();
+});
+
+$('#my_reservations').live('pageshow', function() {
+		initPhpDate();
+		getMyReservations();
 });
