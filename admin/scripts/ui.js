@@ -431,3 +431,13 @@ function search_reservation()
 		}
     });
 }
+
+function cancel_reservation_by_time()
+{
+	var from_date = $("input[name='from_date']").val();
+	var from_time = $("input[name='from_time']").val();
+	var to_date = $("input[name='to_date']").val();
+	var to_time = $("input[name='to_time']").val();
+	
+	alert ("From : " + from_date + " " + from_time + " ; To :" + to_date + " " + to_time);
+}
