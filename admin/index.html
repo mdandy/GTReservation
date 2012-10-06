@@ -46,7 +46,12 @@
 	</div>
 	<div class="page_content" data-role="content">
 		<div id="search_form">
-			<input type="search" name="user_id" id="user_id" value="GT User name" />
+			<input type="search" name="user_id" id="user_id" value="GT User name" onclick="highlight(this)"/>
+			<a onclick="search_reservation()" data-role="button" data-icon="search">Search</a>
+			<div class="cushion" ></div>
+			<div class="status"></div>
+			<ul data-role="listview" id = 'reservation_list' data-theme="g">
+			</ul>
 		</div>
 	</div>
 </div>
@@ -61,24 +66,27 @@
 	</div>
 	<div class="page_content" data-role="content">
 		<div id="cancel_form">
-			<label for="user_id"><p class="bold_label">GT User name:</p></label>
-    		<input type="text" name="user_id" id="user_id" value=""  />
-			
-			<a onclick="cancelReservation()" data-role="button" data-icon="delete">Cancel Reservation</a>
-			<div class="cushion"></div>
-			<hr />
-			<div class="cushion"></div>
-			
 			<p class="bold_label">From:</p>
-			<input name="from_date" id="from_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
-			<input name="from_time" id="from_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			<div data-role="fieldcontain">
+				<label for="from_date">Date:</label>
+				<input name="from_date" id="from_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
+			</div>
+			<div data-role="fieldcontain">
+				<label for="from_time">Time:</label>
+				<input name="from_time" id="from_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			</div>
 			
 			
 			<p class="bold_label">To:</p>
-			<input name="to_date" id="to_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
-			<input name="to_time" id="to_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
-			
-			<a onclick="cancelReservation()" data-role="button" data-icon="delete">Cancel Reservation</a>
+			<div data-role="fieldcontain">
+				<label for="to_date">Date:</label>
+				<input name="to_date" id="to_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
+			</div>
+			<div data-role="fieldcontain">
+				<label for="to_time">Time:</label>
+				<input name="to_time" id="to_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			</div>
+			<a onclick="cancelReservationByTime()" data-role="button" data-icon="delete">Cancel Reservation</a>
 		</div>
 	</div>
 </div>

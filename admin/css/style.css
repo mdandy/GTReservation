@@ -2,12 +2,18 @@
 
 .cushion
 {
-	height: 20px;	
+	height: 40px;	
 }
 
 .bold_label
 {
 	font-weight: bold;
+}
+
+.status
+{
+	font-weight: bold;
+	font-style: italic;	
 }
 
 /** Reservation Detail **/
