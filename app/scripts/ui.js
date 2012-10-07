@@ -697,11 +697,11 @@ function cancel_reservation_by_time()
         {
                 var from_time = from_date.getTime();    //return milliseconds after Epoch
                 var to_time = to_date.getTime();                //return milliseconds after Epoch
-                var interval = (from_time - to_time) / (1000 * 60 * 60);
+                var interval = (to_time - from_time) / (1000 * 60 * 60);
 
                 $.ajax({
                 type: "DELETE",
-                url: "api/reservation/-1/interval=" + interval + "&comment=" + comment,
+                url: "api/reservation/-1?interval=" + interval + "&comment=" + comment,
                 dataType: "text",
                 success: function(data, textStatus, jqXHR) {
                         console.log(data);
