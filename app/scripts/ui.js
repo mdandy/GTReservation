@@ -68,6 +68,11 @@ $('#create_reservations').live('pageshow', function() {
 		getResData();
 });
 
+$('#view_reservations').live('pageshow', function() {
+		todaysDateAdmin();
+		getResData();
+});
+
 $('#my_reservations').live('pageshow', function() {
 		$(".status").empty();
 		initPhpDate();
@@ -325,9 +330,9 @@ function generateTable(data) {
 function generateTableAdmin(data) {
 
 	var currTime;
-	// var currCourt;
-	// var currDate;
-	// var currID;
+	var currCourt;
+	var currDate;
+	var currID;
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var count;
 	var hour = 0;
@@ -387,10 +392,13 @@ function generateTableAdmin(data) {
 	template += "</div>";
 	for (i = 0; i <= count; i++) {
 		template += "<div class='ui-grid-d'>";
-		currTime = Date.parse(data.reservation[rcount].time).toString('hh:mm tt');
-		currCourt = data.reservation[rcount].court_number;
-		currDate = Date.parse(data.reservation[rcount].time).toString("ddd MMM d yyyy");
-		currID = data.reservation[rcount].reservation_id;
+		if(rcount<data.reservation.length)
+		{
+			currTime = Date.parse(data.reservation[rcount].time).toString('hh:mm tt');
+			currCourt = data.reservation[rcount].court_number;
+			currDate = Date.parse(data.reservation[rcount].time).toString("ddd MMM d yyyy");
+			currID = data.reservation[rcount].reservation_id;
+		}
 		if($("#view_reservations .page_content #container #menu #court").html() == "Squash Court"){
 			if(i>=hour){
 				template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
