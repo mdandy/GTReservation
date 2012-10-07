@@ -73,12 +73,15 @@
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
 				if (isset($_GET['reservation_id']))
+				{
+					echo $_GET['reservation_id'];
 					echo cancel_reservation_by_id($_GET['reservation_id']);
+				}
 				else
 				{
 					$court_number = intval($_REST['reservation']);
 					$interval = intval($_GET['interval']);
-					$comment = $_GET['comment']
+					$comment = $_GET['comment'];
 					echo cancel_reservations_by_time($court_number, $_GET['start_time'], $interval, $comment);
 				}
 			]]></action>
@@ -100,7 +103,7 @@
 		
 		<get>
 			<description><![CDATA[
-				Retrieve court reservations.
+				Retrieve privelege level of a user.
 			]]></description>
 			<action file='server/user.php'><![CDATA[
 				$user_id = $_REST['user'];
