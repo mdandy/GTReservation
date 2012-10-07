@@ -22,6 +22,11 @@
 	visibility:
 }
 
+textarea
+{
+	resize: none;
+}
+
 /** Reservation Detail **/
 
 #reservation_detail .page_content #profile img

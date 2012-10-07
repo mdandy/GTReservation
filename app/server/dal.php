@@ -226,30 +226,57 @@ class DAL {
     return false; 
   }
   
-  public static function delete_reservation_by_time($reserve_time, $interval=0) {
+  public static function delete_reservation_by_time($court_number, $reserve_time, $interval=0) {
     try {
 	    $end_time = new DateTime($reserve_time);
 		$end_time->modify("+$interval hours");
 		$start_time = $reserve_time;
 		$end_time = $end_time->format("Y-m-d H:i:s");
 		
+		// Select the reservation that will be deleted
+		$sql = "SELECT u.user_id, u.name, u.email FROM Users u, Reservations r WHERE "; 
+		if ($interval > 0)
+			$sql .= " r.reserve_time BETWEEN :start_time AND :end_time";
+		else
+			$sql .= " r.reserve_time >= :start_time";
+		$sql .= " AND r.user_id = u.user_id";
+		
+		if ($court_number > 0)
+			$sql .= " AND r.court_id=:court_number";
+			
+		$query = self::$dbh->prepare($sql);
+	  	$query->bindParam(":start_time", $start_time);
+		if ($court_number > 0)
+			$query->bindParam(":court_number", $court_number);
+	  	if ($interval > 0)
+			$query->bindParam(":end_time", $end_time);
+		$query->execute();
+		$result = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// Delete reservation
 		$sql = "DELETE FROM Reservations WHERE "; 
 		if ($interval > 0)
 			$sql .= " reserve_time BETWEEN :start_time AND :end_time";
 		else
 			$sql .= " reserve_time >= :start_time";	
+			
+		if ($court_number > 0)
+			$sql .= " AND r.court_id=:court_number";
 		
-      $query = self::$dbh->prepare($sql);
-	  $query->bindParam(":start_time", $start_time);
-	  if ($interval > 0)
+     	$query = self::$dbh->prepare($sql);
+	  	$query->bindParam(":start_time", $start_time);
+		if ($court_number > 0)
+			$query->bindParam(":court_number", $court_number);
+	  	if ($interval > 0)
 			$query->bindParam(":end_time", $end_time);
-      $isSuccessful = $query->execute();
-	  return $isSuccessful;
+      	$isSuccessful = $query->execute();
+	  	if ($isSuccessful)
+	  		return $result;
     }
     catch(PDOException $e) {
       echo ("Error: " . $e->getMessage());
     }
-    return false; 
+    return NULL; 
   }
   
   public static function delete_reservation($user_id, $court_id, $reserve_time) {

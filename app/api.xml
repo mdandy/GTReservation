@@ -78,7 +78,8 @@
 				{
 					$court_number = intval($_REST['reservation']);
 					$interval = intval($_GET['interval']);
-					echo cancel_reservations_by_time($court_number, $_GET['start_time'], $interval);
+					$comment = $_GET['comment']
+					echo cancel_reservations_by_time($court_number, $_GET['start_time'], $interval, $comment);
 				}
 			]]></action>
 		</delete>

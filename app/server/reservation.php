@@ -74,14 +74,14 @@ function cancel_reservation_by_id($reservation_id)
  * @param $interval [Optional] The time interval (in an increment of one hour). THe default value is one hour.
  * @return TRUE on sucess or FALSE otherwise
  */
-function cancel_reservations_by_time($court_number, $start_time, $interval = 1)
+function cancel_reservations_by_time($court_number, $start_time, $interval = 1, $comment = "")
 {
 	$start_time = __normalize_date($start_time);
 	if ($start_time == NULL)
 		return "FALSE";
 	
 	DAL::connect();
-	$isSuccessful = DAL::delete_reservation_by_time($start_time, $interval);
+	$isSuccessful = DAL::delete_reservation_by_time($court_number, $start_time, $interval);
 	DAL::disconnect();
 	
 	if ($isSuccessful)
