@@ -331,7 +331,15 @@ function generateMyReservations(data) {
 		template += "<li>";
 		template += "<a onclick=\"nextPage('reservation_detail'); loadReservationDetail(" 
 			 + "'" + currTime + "'" + ',' + currCourt + ',' + "'" + currDate + "'" + ',' + currID + ")\">";
-		template += "<img class='image' src='images/buzz.gif' title='sample'/>";
+			 
+		if (currCourt >= 0 && currCourt <= 4)
+			template += "<img class='image' src='images/racquetball.png' title='sample'/>";
+		else if (currCourt == 5)
+			template += "<img class='image' src='images/squashball.png' title='sample'/>";
+		else
+			template += "<img class='image' src='images/buzz.gif' title='sample'/>";
+		
+		
 		template += "<h3><span class='court'>" + 'Court ' + data.reservation[i].court_number  + "</span></h3>";
 		template += "<h3><span class='time'>" + Date.parse(data.reservation[i].time).toString('hh:mm tt') + "</span></h3>";
 		template += "</a>";
