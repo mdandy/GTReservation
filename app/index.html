@@ -91,8 +91,8 @@
 	<div class="page_content" data-role="content">
 		<div id="container">
 			<div id="menu">
-				<a class="button_left" id="prevDate" onclick="prevDate()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
-				<a class="button_right" id="nextDate" onclick="nextDate();" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
+				<a class="button_left" id="prevDate" onclick="prevDateAdmin()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
+				<a class="button_right" id="nextDate" onclick="nextDateAdmin();" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
 				<h2 id ="dateRes"> 25/09/2012 </h2>
 				<a class="button_left" onclick="changeCourtAdmin()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
 				<a class="button_right" onclick="changeCourtAdmin()" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
@@ -159,6 +159,9 @@
 				<textarea cols="40" rows="8" name="textarea" maxlength="140" id="comment"></textarea>
 			</div>
 			<a onclick="cancel_reservation_by_time()" data-role="button" data-icon="delete">Cancel Reservation</a>
+			
+			<div class="cushion" ></div>
+			<div class="status"></div>
 		</div>
 	</div>
 </div>

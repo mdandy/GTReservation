@@ -13,17 +13,17 @@ function changeCourt()
 	}
 }
 
-// function changeCourtAdmin()
-// {
-// 	var court = $("#view_reservations .page_content #container #menu #court").innerHTML;
-// 	if(court == "Racquetball Court")
-// 	{
-// 		$("#view_reservations .page_content #container #menu #court").innerHTML = "Squash Court";
-// 		getResDataAdmin();
-// 	}
-// 	else
-// 	{
-// 		$("#view_reservations .page_content #container #menu #court").innerHTML = "Racquetball Court";
-// 		getResDataAdmin();
-// 	}
-// }
+function changeCourtAdmin()
+{
+	var court = $("#view_reservations .page_content #container #menu #court").html();
+	if(court == "Racquetball Court")
+	{
+		$("#view_reservations .page_content #container #menu #court").html("Squash Court");
+		getResDataAdmin();
+	}
+	else
+	{
+		$("#view_reservations .page_content #container #menu #court").html("Racquetball Court");
+		getResDataAdmin();
+	}
+}

@@ -64,7 +64,7 @@ $('#home_page').live('pageshow', function() {
 });
 
 $('#create_reservations').live('pageshow', function() {
-		initPhpDate();
+		todaysDate();
 		getResData();
 });
 
@@ -166,6 +166,7 @@ function dialogCancel(reservation_id, courtCancel, dateCancel, timeCancel, callb
 		        click: function () { 
 		          $('#buttonoutput').text('OK');
 		          cancelReservation(reservation_id);
+		          getResDataAdmin();
 				  eval(callback+"()");
 		        }
 		      },
@@ -229,7 +230,7 @@ function generateTable(data) {
 	template += "<div class='ui-grid-d'>";
 	template += "<div class='grid_cell_header ui-block-a'></div>";
 	if(document.getElementById("court").innerHTML == "Squash Court"){
-		template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
+		template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 5</div>";
 	}
 	else{
 
@@ -323,6 +324,10 @@ function generateTable(data) {
 
 function generateTableAdmin(data) {
 
+	var currTime;
+	// var currCourt;
+	// var currDate;
+	// var currID;
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var count;
 	var hour = 0;
@@ -368,8 +373,8 @@ function generateTableAdmin(data) {
 	template += "<div id='grid_header'>";
 	template += "<div class='ui-grid-d'>";
 	template += "<div class='grid_cell_header ui-block-a'></div>";
-	if(document.getElementById("court").innerHTML == "Squash Court"){
-		template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
+	if($("#view_reservations .page_content #container #menu #court").html() == "Squash Court"){
+		template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 5</div>";
 	}
 	else{
 
@@ -382,11 +387,15 @@ function generateTableAdmin(data) {
 	template += "</div>";
 	for (i = 0; i <= count; i++) {
 		template += "<div class='ui-grid-d'>";
-		if(document.getElementById("court").innerHTML == "Squash Court"){
+		currTime = Date.parse(data.reservation[rcount].time).toString('hh:mm tt');
+		currCourt = data.reservation[rcount].court_number;
+		currDate = Date.parse(data.reservation[rcount].time).toString("ddd MMM d yyyy");
+		currID = data.reservation[rcount].reservation_id;
+		if($("#view_reservations .page_content #container #menu #court").html() == "Squash Court"){
 			if(i>=hour){
 				template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) && Date.parse(data.reservation[rcount].time).getDay() == day){
-					template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+					template += "<div class='grid_cell ui-block-b' style='cursor:pointer' onclick=\"dialogCancel('" + currID + "','" + currCourt + "','" + currDate + "','" + currTime + "','search_reservation')\">X</div>";
 					rcount++;
 				}
 				else{
@@ -404,7 +413,7 @@ function generateTableAdmin(data) {
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) 
 						&& data.reservation[rcount].court_number == 1 && 
 						Date.parse(data.reservation[rcount].time).getDay() == day){
-					template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+					template += "<div class='grid_cell ui-block-b' style='cursor:pointer' onclick=\"dialogCancel('" + currID + "','" + currCourt + "','" + currDate + "','" + currTime + "','search_reservation')\">X</div>";
 					rcount++;
 				}
 				else{
@@ -413,7 +422,7 @@ function generateTableAdmin(data) {
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
 						&& data.reservation[rcount].court_number == 2 && 
 						Date.parse(data.reservation[rcount].time).getDay() == day){
-					template += "<div class='grid_cell ui-block-c' style='cursor:auto'>X</div>";
+					template += "<div class='grid_cell ui-block-c' style='cursor:pointer' onclick=\"dialogCancel('" + currID + "','" + currCourt + "','" + currDate + "','" + currTime + "','search_reservation')\">X</div>";
 					rcount++;
 				}
 				else{
@@ -422,7 +431,7 @@ function generateTableAdmin(data) {
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
 						&& data.reservation[rcount].court_number == 3 && 
 						Date.parse(data.reservation[rcount].time).getDay() == day){
-					template += "<div class='grid_cell ui-block-d' style='cursor:auto'>X</div>";
+					template += "<div class='grid_cell ui-block-d' style='cursor:pointer' onclick=\"dialogCancel('" + currID + "','" + currCourt + "','" + currDate + "','" + currTime + "','search_reservation')\">X</div>";
 					rcount++;
 				}
 				else{
@@ -431,7 +440,7 @@ function generateTableAdmin(data) {
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
 						&& data.reservation[rcount].court_number == 4 && 
 						Date.parse(data.reservation[rcount].time).getDay() == day){
-					template += "<div class='grid_cell ui-block-e' style='cursor:auto'>X</div>";
+					template += "<div class='grid_cell ui-block-e' style='cursor:pointer' onclick=\"dialogCancel('" + currID + "','" + currCourt + "','" + currDate + "','" + currTime + "','search_reservation')\">X</div>";
 					rcount++;
 				}
 				else{
@@ -490,7 +499,7 @@ function getResData() {// Handler for .ready() called.
 function getResDataAdmin() {// Handler for .ready() called.
 	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
 	var court_number = -1;
-	if(document.getElementById('court').innerHTML == 'Squash Court')
+	if($("#view_reservations .page_content #container #menu #court").html() == 'Squash Court')
 		court_number = 5;
 	var zeroHourDate = phpDate;
 	var numHours = Date.parse(zeroHourDate).getHours();
@@ -544,6 +553,7 @@ function generateMyReservations(data, target, cancelDialog) {
 	var currTime;
 	var currCourt;
 	var currDate;
+	var currID;
 	var template = "";	
 	//template += "<ul data-role='listview' id = 'list' data-theme='g'>";
 	for (i = 0; i < data.reservation.length; i++) {
@@ -643,8 +653,8 @@ function cancelReservation(resID) {
 
 function init_cancel_reservation_form()
 {
-	var foo = $("#cancel_reservations #from_date");
-	$(foo).scroller({ preset: 'datetime' });
+	// var foo = $("#cancel_reservations #from_date");
+	// $(foo).scroller({ preset: 'datetime' });
 }
 
 function highlight(element)

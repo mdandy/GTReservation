@@ -6,6 +6,7 @@ function todaysDate() {
 	currDate = Date.today().toString("ddd MMM d yyyy");	
 	phpDate = Date.today().setTimeToNow().toString("yyyy-MM-dd HH:mm:ss");
 	document.getElementById('dateRes').innerHTML = currDate;
+	$("#view_reservations .page_content #container #menu #dateRes").html(currDate);
 	today = currDate; // this is only called once so set todays date
 	$('#prevDate').addClass('ui-disabled'); // disable prev button
 	getResData();
@@ -16,6 +17,7 @@ function todaysDateAdmin() {
 	currDate = Date.today().toString("ddd MMM d yyyy");	
 	phpDate = Date.today().setTimeToNow().toString("yyyy-MM-dd HH:mm:ss");
 	document.getElementById('dateRes').innerHTML = currDate;
+	$("#view_reservations .page_content #container #menu #dateRes").html(currDate);
 	today = currDate; // this is only called once so set todays date
 	$('#prevDate').addClass('ui-disabled'); // disable prev button
 	getResDataAdmin();
@@ -53,4 +55,35 @@ function nextDate(){
 		$('#nextDate').addClass('ui-disabled');
 	}
 	getResData();
+}
+
+function prevDateAdmin(){
+	$('#nextDate').removeClass('ui-disabled');
+	if (Date.parse(currDate).isAfter(Date.today())) { // only allow if the prevDate is post today
+		currDate = document.getElementById('dateRes').innerHTML;
+		currDate = Date.parse(currDate.toString("ddd MMM d yyyy")).add(-1).days().toString("ddd MMM d yyyy");
+		phpDate = Date.parse(phpDate.toString("yyyy-MM-dd HH:mm:ss")).add(-1).days().toString("yyyy-MM-dd HH:mm:ss");
+		document.getElementById('dateRes').innerHTML = currDate;
+		$("#view_reservations .page_content #container #menu #dateRes").html(currDate);
+	}
+	if (!Date.parse(currDate).isAfter(Date.today())) { // check if updated date is today or earlier
+		$('#prevDate').addClass('ui-disabled');
+	}
+	getResDataAdmin();
+}
+
+function nextDateAdmin(){
+	$('#prevDate').removeClass('ui-disabled');
+	if (Date.parse(currDate).isBefore(Date.today().add(2).days())) {
+		currDate = document.getElementById('dateRes').innerHTML;
+		currDate = Date.parse(currDate.toString("ddd MMM d yyyy")).add(1).days().toString("ddd MMM d yyyy");
+		phpDate = Date.parse(phpDate.toString("yyyy-MM-dd HH:mm:ss")).add(1).days().toString("yyyy-MM-dd HH:mm:ss");
+		document.getElementById('dateRes').innerHTML = currDate;
+		$("#view_reservations .page_content #container #menu #dateRes").html(currDate);
+
+	} 
+	if (!Date.parse(currDate).isBefore(Date.today().add(2).days())) {
+		$('#nextDate').addClass('ui-disabled');
+	}
+	getResDataAdmin();
 }
