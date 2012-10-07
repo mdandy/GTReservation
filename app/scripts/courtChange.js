@@ -12,3 +12,18 @@ function changeCourt()
 		getResData();
 	}
 }
+
+// function changeCourtAdmin()
+// {
+// 	var court = $("#view_reservations .page_content #container #menu #court").innerHTML;
+// 	if(court == "Racquetball Court")
+// 	{
+// 		$("#view_reservations .page_content #container #menu #court").innerHTML = "Squash Court";
+// 		getResDataAdmin();
+// 	}
+// 	else
+// 	{
+// 		$("#view_reservations .page_content #container #menu #court").innerHTML = "Racquetball Court";
+// 		getResDataAdmin();
+// 	}
+// }

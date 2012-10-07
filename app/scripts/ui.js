@@ -624,7 +624,7 @@ function cancelReservation(resID) {
 	//time = Date.parse(document.getElementById('myTime').innerHTML).toString('yyyy-MM-dd HH:mm:ss');
 	
 	if (resID === undefined)
-		var resID = document.getElementById('myResID').value;
+		resID = document.getElementById('myResID').value;
 	console.log("resID: " + resID);
 	var query = {reservation_id:resID};
     $.ajax({
