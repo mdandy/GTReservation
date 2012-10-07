@@ -683,10 +683,39 @@ function search_reservation()
 
 function cancel_reservation_by_time()
 {
-	var from_date = $("input[name='from_date']").val();
-	var from_time = $("input[name='from_time']").val();
-	var to_date = $("input[name='to_date']").val();
-	var to_time = $("input[name='to_time']").val();
-	
-	alert ("From : " + from_date + " " + from_time + " ; To :" + to_date + " " + to_time);
+	$(".status").empty();
+
+        var from_date_raw = $("input[name='from_date']").val();
+        var from_time_raw = $("input[name='from_time']").val();
+        var to_date_raw = $("input[name='to_date']").val();
+        var to_time_raw = $("input[name='to_time']").val();
+        var comment = $("#cancel_reservations .page_content #cancel_form #comment").val();
+
+        var from_date = Date.parse(from_date_raw + " " + from_time_raw);
+        var to_date = Date.parse(to_date_raw + " " + to_time_raw);
+        if (to_date.isAfter(from_date))
+        {
+                var from_time = from_date.getTime();    //return milliseconds after Epoch
+                var to_time = to_date.getTime();                //return milliseconds after Epoch
+                var interval = (from_time - to_time) / (1000 * 60 * 60);
+
+                $.ajax({
+                type: "DELETE",
+                url: "api/reservation/-1/interval=" + interval + "&comment=" + comment,
+                dataType: "text",
+                success: function(data, textStatus, jqXHR) {
+                        console.log(data);
+                                $(".status").html("Success: Reservations have been deleted!");
+                },
+                error: function(data, textStatus, jqXHR) {
+                        console.log("Data= " + data);
+                        console.log("Error code= " + textStatus);
+                                $(".status").html("ERROR: Unable to delete reservations!");
+                }
+                });
+        }
+        else
+        {
+                $(".status").html("Error: FROM date cannot be grater than TO date.");
+        }
 }
