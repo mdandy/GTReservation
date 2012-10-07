@@ -42,6 +42,47 @@ function prevPage(page, func, arg)
 }
 
 /**
+ * PAGE LOAD FUNCTIONS
+ */
+
+$('#home_page').live('pageshow', function() {
+		$.ajax({
+    		type: "GET",
+            url: "api/user/active",
+            dataType: "json",
+            success: function(data, textStatus, jqXHR) {
+            		console.log(data);
+            		if (data[0].privilege == "0") {
+						$(".admin").css("visibility", "visible");
+					}
+            },
+            error: function(data, textStatus, jqXHR) {
+                    console.log("Data= " + data);
+                    console.log("Error code= " + textStatus);
+            }
+    	});
+});
+
+$('#create_reservations').live('pageshow', function() {
+		initPhpDate();
+		getResData();
+});
+
+$('#my_reservations').live('pageshow', function() {
+		$(".status").empty();
+		initPhpDate();
+		getMyReservations();
+});
+
+$('#search_reservations').live('pageshow', function() {
+		$(".status").empty();
+});
+
+/**
+ * UI LIB
+ */
+
+/**
  * Load reservation detail.
  * @param {string} reservationID The reservation ID
  */
@@ -86,10 +127,24 @@ function dialog(court, time){
 		  });
 }
 
-function dialogCancel(){
-		var dateCancel = document.getElementById('myDate').innerHTML;
-		var timeCancel = document.getElementById('myTime').innerHTML;
-		var courtCancel = document.getElementById('myCourt').innerHTML;
+function refreshMyReservationList()
+{
+	nextPage('my_reservations', 'getMyReservations');
+}
+
+function dialogCancel(reservation_id, courtCancel, dateCancel, timeCancel, callback){
+		if (dateCancel === undefined)
+			dateCancel = document.getElementById('myDate').innerHTML;
+		
+		if (timeCancel === undefined)
+			timeCancel = document.getElementById('myTime').innerHTML;
+			
+		if (courtCancel === undefined)
+			courtCancel = document.getElementById('myCourt').innerHTML;
+			
+		if (callback === undefined)
+			callback = "refreshMyReservationList";
+		  
 		  // NOTE: The selector can be whatever you like, so long as it is an HTML element.
 		  //       If you prefer, it can be a member of the current page, or an anonymous div
 		  //       like shown.
@@ -102,8 +157,8 @@ function dialogCancel(){
 		      'OK': {
 		        click: function () { 
 		          $('#buttonoutput').text('OK');
-		          cancelReservation();
-		          nextPage('my_reservations', 'getMyReservations');
+		          cancelReservation(reservation_id);
+				  eval(callback+"()");
 		        }
 		      },
 		      'Cancel': {
@@ -299,7 +354,8 @@ function getMyReservations() {// Handler for .ready() called.
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
             		console.log(data);
-            		generateMyReservations(data);
+					var target = $("#my_reservations .page_content #myResList");
+            		generateMyReservations(data, target, false);
             },
             error: function(data, textStatus, jqXHR) {
                     console.log("Data= " + data);
@@ -308,7 +364,7 @@ function getMyReservations() {// Handler for .ready() called.
     });
 };
 
-function generateMyReservations(data) {
+function generateMyReservations(data, target, cancelDialog) {
 	var i;
 	var currentDay = "not equal";
 	var currTime;
@@ -329,8 +385,16 @@ function generateMyReservations(data) {
 			currentDay = Date.parse(data.reservation[i].time).getDay();
 		}
 		template += "<li>";
+		
+		if (cancelDialog)
+		{
+			template += "<a onclick=\"dialogCancel('" + currID + "','" + currCourt + "','" + currDate + "','" + currTime + "','search_reservation')\">";	
+		}
+		else
+		{
 		template += "<a onclick=\"nextPage('reservation_detail'); loadReservationDetail(" 
 			 + "'" + currTime + "'" + ',' + currCourt + ',' + "'" + currDate + "'" + ',' + currID + ")\">";
+		}
 			 
 		if (currCourt >= 0 && currCourt <= 4)
 			template += "<img class='image' src='images/racquetball.png' title='sample'/>";
@@ -347,8 +411,19 @@ function generateMyReservations(data) {
 	}
 	//template += "</ul>"; // close list
 	
-	$("#my_reservations .page_content #myResList").html(template);
-	$("#myResList").listview("refresh");
+	//$("#my_reservations .page_content #myResList").html(template);
+	//$("#myResList").listview("refresh");
+	
+	if (template.length > 0)
+	{
+		$(target).html(template);
+		$(target).listview("refresh");
+	}
+	else
+	{
+		$(target).empty();
+		$(".status").html("No data found.");
+	}
 }
 
 function createNewReservation(court, time) {
@@ -367,13 +442,15 @@ function createNewReservation(court, time) {
     		console.log("Data= " + data);
     		console.log("Error code= " + textStatus);
     	}
-});
+	});
 }
 
-function cancelReservation() {
+function cancelReservation(resID) {
 	//court = document.getElementById('myCourt').innerHTML;
 	//time = Date.parse(document.getElementById('myTime').innerHTML).toString('yyyy-MM-dd HH:mm:ss');
-	var resID = document.getElementById('myResID').value;
+	
+	if (resID === undefined)
+		var resID = document.getElementById('myResID').value;
 	console.log("resID: " + resID);
 	var query = {reservation_id:resID};
     $.ajax({
@@ -387,16 +464,45 @@ function cancelReservation() {
     		console.log("Data= " + data);
     		console.log("Error code= " + textStatus);
     	}
-});
+	});
 }
 
+function init_cancel_reservation_form()
+{
+	var foo = $("#cancel_reservations #from_date");
+	$(foo).scroller({ preset: 'datetime' });
+}
 
-$('#create_reservations').live('pageshow', function() {
-		initPhpDate();
-		getResData();
-});
+function highlight(element)
+{
+	$(element).select();
+}
 
-$('#my_reservations').live('pageshow', function() {
-		initPhpDate();
-		getMyReservations();
-});
+function search_reservation()
+{
+	var username = $("input[name='user_id']").val();
+	$.ajax({
+    	type: "GET",
+		url: "api/reservation/" + username,
+		dataType: "json",
+		success: function(data, textStatus, jqXHR) {
+			console.log(data);
+			var target = $("#search_reservations .page_content #reservation_list");
+			generateMyReservations(data, target, true);
+		},
+		error: function(data, textStatus, jqXHR) {
+			console.log("Data= " + data);
+			console.log("Error code= " + textStatus);
+		}
+    });
+}
+
+function cancel_reservation_by_time()
+{
+	var from_date = $("input[name='from_date']").val();
+	var from_time = $("input[name='from_time']").val();
+	var to_date = $("input[name='to_date']").val();
+	var to_time = $("input[name='to_time']").val();
+	
+	alert ("From : " + from_date + " " + from_time + " ; To :" + to_date + " " + to_time);
+}

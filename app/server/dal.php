@@ -114,6 +114,20 @@ class DAL {
     }
     return false;
   }
+  
+  public static function get_privilege($user_id) {
+	try {
+      $sql = "SELECT privilege FROM Users WHERE user_id=:user_id";
+      $query = self::$dbh->prepare($sql);
+	  $query->bindParam(":user_id", $user_id, PDO::PARAM_STR, 255);
+      $query->execute();
+	  return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e) {
+      echo ("Error: " . $e->getMessage());
+    }
+    return -1;
+  }
 
   /*
    * Inserts a reservation using the user_id, court_id, and the reserve_time.

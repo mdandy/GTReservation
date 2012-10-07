@@ -7,7 +7,10 @@
 	
 	<div class="page_content" data-role="content">
 		<a onclick="nextPage('my_reservations', 'getMyReservations')" data-role="button" data-icon="star">View My Reservations</a>
-		<a onclick="nextPage('create_reservations', 'todaysDate')" data-role="button" data-icon="search">Create Reservations</a>
+		<a onclick="nextPage('create_reservations', 'todaysDate')" data-role="button" data-icon="check">Create Reservations</a>
+		<a onclick="nextPage('view_reservations', 'todaysDate')" data-role="button" data-icon="grid" class="admin hidden">View All Reservations</a>
+		<a onclick="nextPage('search_reservations', '')" data-role="button" data-icon="search" class="admin hidden">Search Reservations</a>
+		<a onclick="nextPage('cancel_reservations', 'init_cancel_reservation_form')" data-role="button" data-icon="delete" class="admin hidden">Cancel Reservations</a>
 	</div>
 </div>
 
@@ -21,34 +24,8 @@
 	</div>
 	
 	<div class="page_content" data-role="content">
+		<div class="status"></div>
 		<ul data-role="listview" id = 'myResList' data-theme="g">
-		<!--
-			<li data-role=list-divider>September 17, 2012</li>
-			<li>
-				<a onclick="nextPage('reservation_detail', 'loadReservationDetail', '1000AM')">
-					<img class="image" src="images/buzz.gif" title="sample"/>
-					<h3><span class="court">Court 1</span></h3>
-					<h3><span class="time">10:00 AM</span></h3>
-				</a>
-			</li>
-			<li>
-				<a onclick="nextPage('reservation_detail')">
-					<img class="image" src="images/buzz.gif" title="sample"/>
-					<h3><span class="court">Court 3</span></h3>
-					<h3><span class="time">02:00 PM</span></h3>
-				</a>
-			</li>
-			
-			
-			<li data-role=list-divider>September 18, 2012</li>
-			<li>
-				<a onclick="nextPage('reservation_detail')">
-					<img class="image" src="images/buzz.gif" title="sample"/>
-					<h3><span class="court">Court 2</span></h3>
-					<h3><span class="time">02:00 PM</span></h3>
-				</a>
-			</li>
-			-->
 		</ul>
 	</div>
 </div>
@@ -97,6 +74,91 @@
 			</div>
 			<div id="grid_header">
 			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ADMIN PAGE -->
+
+<!-- View All Reservations -->
+
+<div data-role="page" id="view_reservations">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
+		<h1>View Reservations</h1>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
+	</div>
+	<div class="page_content" data-role="content">
+		<div id="container">
+			<div id="menu">
+				<a class="button_left" id="prevDate" onclick="prevDate()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
+				<a class="button_right" id="nextDate" onclick="nextDate();" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
+				<h2 id ="dateRes"> 25/09/2012 </h2>
+				<a class="button_left" onclick="changeCourt()" data-role="button" data-icon='arrow-l' data-iconpos="notext">prev</a>
+				<a class="button_right" onclick="changeCourt()" data-role="button" data-icon='arrow-r' data-iconpos="notext">next</a>
+				<h2 id="court">Racquetball Court</h2>
+			</div>
+			<div id="grid_header">
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Search Reservation -->
+
+<div data-role="page" id="search_reservations">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
+		<h1>Search</h1>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
+	</div>
+	<div class="page_content" data-role="content">
+		<div id="search_form">
+			<input type="search" name="user_id" id="user_id" value="GT User name" onclick="highlight(this)"/>
+			<a onclick="search_reservation()" data-role="button" data-icon="search">Search</a>
+			<div class="cushion" ></div>
+			<div class="status"></div>
+			<ul data-role="listview" id = 'reservation_list' data-theme="g">
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- Cancel Reservation -->
+
+<div data-role="page" id="cancel_reservations">
+	<div data-role='header' data-position='inline' data-theme='d'>
+		<a onclick="prevPage('home_page')" data-icon='back'>Back</a>
+		<h1>Cancel Reservation</h1>
+		<a onclick="prevPage('home_page')" data-icon='home'>Home</a>
+	</div>
+	<div class="page_content" data-role="content">
+		<div id="cancel_form">
+			<p class="bold_label">From:</p>
+			<div data-role="fieldcontain">
+				<label for="from_date">Date:</label>
+				<input name="from_date" id="from_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
+			</div>
+			<div data-role="fieldcontain">
+				<label for="from_time">Time:</label>
+				<input name="from_time" id="from_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			</div>
+			
+			
+			<p class="bold_label">To:</p>
+			<div data-role="fieldcontain">
+				<label for="to_date">Date:</label>
+				<input name="to_date" id="to_date" type="date" data-role="datebox" data-options='{"mode": "flipbox"}' value="date">
+			</div>
+			<div data-role="fieldcontain">
+				<label for="to_time">Time:</label>
+				<input name="to_time" id="to_time" type="time" data-role="datebox" data-options='{"mode": "timebox"}' value="time">
+			</div>
+			<div data-role="fieldcontain">
+				<label for="textarea">Comment:</label>
+				<textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+			</div>
+			<a onclick="cancel_reservation_by_time()" data-role="button" data-icon="delete">Cancel Reservation</a>
 		</div>
 	</div>
 </div>

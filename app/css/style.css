@@ -1,5 +1,26 @@
 /* CSS Document */
 
+.cushion
+{
+	height: 40px;	
+}
+
+.bold_label
+{
+	font-weight: bold;
+}
+
+.status
+{
+	font-weight: bold;
+	font-style: italic;	
+}
+
+.hidden
+{
+	visibility: hidden;
+	visibility:
+}
 
 /** Reservation Detail **/
 
@@ -28,31 +49,36 @@
 
 /** Create Reservations **/
 
-#create_reservations .page_content #container
+#create_reservations .page_content #container,
+#view_reservations .page_content #container
 {
 	margin: -15px;	
 }
 
-#create_reservations .page_content #container #menu
+#create_reservations .page_content #container #menu,
+#view_reservations .page_content #container #menu
 {
 	background: url(../images/reservation_header.png) no-repeat top left;
 	background-size: 100% 126px;
 	height:	126px;
 }
 
-#create_reservations .page_content #container #menu .button_left
+#create_reservations .page_content #container #menu .button_left,
+#view_reservations .page_content #container #menu .button_left
 {
 	position: absolute;
 	left: 10px;
 }
 
-#create_reservations .page_content #container #menu .button_right
+#create_reservations .page_content #container #menu .button_right,
+#view_reservations .page_content #container #menu .button_right
 {
 	position: absolute;
 	right: 10px;
 }
 
-#create_reservations .page_content #container #menu h2
+#create_reservations .page_content #container #menu h2,
+#view_reservations .page_content #container #menu h2
 {
 	min-height: 1.1em;
 	text-align: center;
@@ -69,12 +95,14 @@
 
 /** Create Reservations -- Timeslot **/
 
-#create_reservations .page_content #container #grid_header
+#create_reservations .page_content #container #grid_header,
+#view_reservations .page_content #container #grid_header
 {
 	margin-top: -42px;
 }
 
-#create_reservations .page_content #container #grid_header .ui-grid-d .grid_cell_header
+#create_reservations .page_content #container #grid_header .ui-grid-d .grid_cell_header,
+#view_reservations .page_content #container #grid_header .ui-grid-d .grid_cell_header
 {
 	height: 42px;
 	text-align: center;
@@ -89,12 +117,14 @@
 	border-bottom: #DDD solid 1px;
 }
 
-#create_reservations .page_content #container #grid_header .ui-grid-d .ui-block-a
+#create_reservations .page_content #container #grid_header .ui-grid-d .ui-block-a,
+#view_reservations .page_content #container #grid_header .ui-grid-d .ui-block-a
 {
 	background-color: transparent;
 }
 
-#create_reservations .page_content #container .ui-grid-d .grid_cell
+#create_reservations .page_content #container .ui-grid-d .grid_cell,
+#view_reservations .page_content #container .ui-grid-d .grid_cell
 {
 	height: 25px;	
 	text-align: center;
@@ -102,31 +132,38 @@
 	border-bottom: #CCC solid 1px;
 }
 
-#create_reservations .page_content #container .ui-grid-d .ui-block-a
+#create_reservations .page_content #container .ui-grid-d .ui-block-a,
+#view_reservations .page_content #container .ui-grid-d .ui-block-a
 {
 	background: #CCC;
 }
 
-#create_reservations .page_content #container .ui-grid-d .ui-block-b
+#create_reservations .page_content #container .ui-grid-d .ui-block-b,
+#view_reservations .page_content #container .ui-grid-d .ui-block-b
 {
 	background: #EFF28D;
 }
 
-#create_reservations .page_content #container .ui-grid-d .ui-block-c
+#create_reservations .page_content #container .ui-grid-d .ui-block-c,
+#view_reservations .page_content #container .ui-grid-d .ui-block-c
 {
 	background: #F2BF80;
 }
 
-#create_reservations .page_content #container .ui-grid-d .ui-block-d
+#create_reservations .page_content #container .ui-grid-d .ui-block-d,
+#view_reservations .page_content #container .ui-grid-d .ui-block-d
 {
 	background: #F29580;
 }
 
-#create_reservations .page_content #container .ui-grid-d .ui-block-e
+#create_reservations .page_content #container .ui-grid-d .ui-block-e,
+#view_reservations .page_content #container .ui-grid-d .ui-block-e
 {
 	background: #F28080;
 }
 
-#create_reservations .page_content #container .ui-grid-d .g {
+#create_reservations .page_content #container .ui-grid-d .g,
+#view_reservations .page_content #container .ui-grid-d .g 
+{
     background: #A9A9A9;
 }

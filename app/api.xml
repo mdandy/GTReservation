@@ -23,7 +23,7 @@
 				Retrieve court reservations.
 			]]></description>
 			<action file='server/reservation.php'><![CDATA[
-				$arg = $_REST["reservation"];
+				$arg = $_REST['reservation'];
 				if ($arg == 'active')
 					echo get_reservations_by_active_user();
 				else
@@ -96,5 +96,17 @@
 				echo get_active_user();
 			]]></action>
 		</index>
+		
+		<get>
+			<description><![CDATA[
+				Retrieve court reservations.
+			]]></description>
+			<action file='server/user.php'><![CDATA[
+				$user_id = $_REST['user'];
+				if ($user_id == 'active')
+					$user_id = get_active_user();
+				echo json_encode(is_admin($user_id));
+			]]></action>
+		</get>
 	</command>
 </api>

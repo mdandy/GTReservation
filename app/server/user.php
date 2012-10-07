@@ -43,4 +43,12 @@ function get_active_user()
 	return $_USER['uid'];
 }
 
+function is_admin($user_id)
+{
+	DAL::connect();
+	$data  = DAL::get_privilege($user_id);
+	DAL::disconnect();
+	return $data;
+}
+
 ?>
