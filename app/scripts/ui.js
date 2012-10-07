@@ -89,11 +89,19 @@ $('#search_reservations').live('pageshow', function() {
 function loadReservationDetail(currTime, currCourt, currDate, reservation_id)
 {
 	var template = "";
+	if (currCourt >= 0 && currCourt <= 4)
+			template += "<img class='image' src='images/racquetball.png' title='sample'/>";
+		else if (currCourt == 5)
+			template += "<img class='image' src='images/squashball.png' title='sample'/>";
+		else
+			template += "<img class='image' src='images/buzz.gif' title='sample'/>";
+	template+= 	"<div class='description'>";
 	template+= "<h3><span class='label'>Court: </span><span class='reservation_court' id = 'myCourt'>" + currCourt + "</span></h3>";
 	template+= "<h3><span class='label'>Date: </span><span class='date' id = 'myDate'>" + currDate + "</span></h3>";
 	template+= "<h3><span class='label'>Time: </span><span class='time' id = 'myTime'>" + currTime + "</span></h3>";
 	template+= "<input type='hidden' id = 'myResID' value='" + reservation_id + "'/>";
-	$("#reservation_detail .page_content #profile .description").html(template);	
+	template+= "</div>";
+	$("#reservation_detail .page_content #profile").html(template);	
 }
 
 function dialog(court, time){
@@ -242,7 +250,7 @@ function generateTable(data) {
 					rcount++;
 				}
 				else{
-					template += "<div class='grid_cell ui-block-e' onclick='dialog(" + 5 + ',' 
+					template += "<div class='grid_cell ui-block-e' style='cursor:pointer' onclick='dialog(" + 5 + ',' 
 					+ i + ")" + "'></div>";
 				}
 			}
@@ -261,7 +269,7 @@ function generateTable(data) {
 					rcount++;
 				}
 				else{
-						template += "<div class='grid_cell ui-block-b' onclick='dialog(" + 1 + ',' 
+						template += "<div class='grid_cell ui-block-b' style='cursor:pointer' onclick='dialog(" + 1 + ',' 
 						+ i + ")" + "'></div>";
 				}
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
@@ -271,7 +279,7 @@ function generateTable(data) {
 					rcount++;
 				}
 				else{
-					template += "<div class='grid_cell ui-block-c' onclick='dialog(" + 2 + ',' 
+					template += "<div class='grid_cell ui-block-c' style='cursor:pointer' onclick='dialog(" + 2 + ',' 
 					+ i + ")" + "'></div>";
 				}
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
@@ -281,7 +289,7 @@ function generateTable(data) {
 					rcount++;
 				}
 				else{
-					template += "<div class='grid_cell ui-block-d' onclick='dialog(" + 3 + ',' 
+					template += "<div class='grid_cell ui-block-d' style='cursor:pointer' onclick='dialog(" + 3 + ',' 
 					+ i + ")" + "'></div>";
 				}
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
@@ -291,7 +299,7 @@ function generateTable(data) {
 					rcount++;
 				}
 				else{
-					template += "<div class='grid_cell ui-block-e' onclick='dialog(" + 4 + ',' 
+					template += "<div class='grid_cell ui-block-e' style='cursor:pointer' onclick='dialog(" + 4 + ',' 
 					+ i + ")" + "'></div>";
 				}
 				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
@@ -311,6 +319,141 @@ function generateTable(data) {
 		template += "</div>";
 	}
 	$("#create_reservations .page_content #container #grid_header").html(template);
+}
+
+function generateTableAdmin(data) {
+
+	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
+	var count;
+	var hour = 0;
+	var rcount = 0;
+	var numRes = 0;
+	if (data != null) {
+		numRes = data.reservation.length;
+	}
+	if (day > 5) { // It is a Saturday or Sunday
+		count = 14;
+	}
+	else {
+		count = 16;
+	}
+	
+	var template = "";
+	var i;
+	var times = new Array();
+	var d = new Date();
+	
+	if(day == d.getDay())
+	{
+		hour = d.getHours() - 6; // account for military time
+	}
+	
+	times[0] = "6:00 AM";
+	times[1] = "7:00 AM";
+	times[2] = "8:00 AM";
+	times[3] = "9:00 AM";
+	times[4] = "10:00 AM";
+	times[5] = "11:00 AM";
+	times[6] = "12:00 PM";
+	times[7] = "1:00 PM";
+	times[8] = "2:00 PM";
+	times[9] = "3:00 PM";
+	times[10] = "4:00 PM";
+	times[11] = "5:00 PM";
+	times[12] = "6:00 PM";
+	times[13] = "7:00 PM";
+	times[14] = "8:00 PM";
+	times[15] = "9:00 PM";
+	times[16] = "10:00 PM";
+	template += "<div id='grid_header'>";
+	template += "<div class='ui-grid-d'>";
+	template += "<div class='grid_cell_header ui-block-a'></div>";
+	if(document.getElementById("court").innerHTML == "Squash Court"){
+		template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
+	}
+	else{
+
+	template += "<div class='grid_cell_header ui-block-b' style='cursor:auto'>Court 1</div>";
+	template += "<div class='grid_cell_header ui-block-c' style='cursor:auto'>Court 2</div>";
+	template += "<div class='grid_cell_header ui-block-d' style='cursor:auto'>Court 3</div>";
+	template += "<div class='grid_cell_header ui-block-e' style='cursor:auto'>Court 4</div>";
+	}
+	template += "</div>";
+	template += "</div>";
+	for (i = 0; i <= count; i++) {
+		template += "<div class='ui-grid-d'>";
+		if(document.getElementById("court").innerHTML == "Squash Court"){
+			if(i>=hour){
+				template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) && Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-e'></div>";
+				}
+			}
+			else{
+				template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
+				template += "<div class='grid_cell ui-block-b g'></div>";
+			}
+		}
+		else{
+			if(i>=hour) {
+				template += "<div class='grid_cell ui-block-a'>" + times[i] + "</div>";
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours() == (i+6) 
+						&& data.reservation[rcount].court_number == 1 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-b' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+						template += "<div class='grid_cell ui-block-b'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 2 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-c' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-c'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 3 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-d' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-d'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 4 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					template += "<div class='grid_cell ui-block-e' style='cursor:auto'>X</div>";
+					rcount++;
+				}
+				else{
+					template += "<div class='grid_cell ui-block-e'></div>";
+				}
+				if(rcount < numRes && Date.parse(data.reservation[rcount].time).getHours()==(i+6) 
+						&& data.reservation[rcount].court_number == 5 && 
+						Date.parse(data.reservation[rcount].time).getDay() == day){
+					rcount++;
+				}			
+			}
+			else {
+				template += "<div class='grid_cell ui-block-a g'>" + times[i] + "</div>";
+				template += "<div class='grid_cell ui-block-b g'></div>";
+				template += "<div class='grid_cell ui-block-c g'></div>";
+				template += "<div class='grid_cell ui-block-d g'></div>";
+				template += "<div class='grid_cell ui-block-e g'></div>";
+			}
+		}
+		template += "</div>";
+	}
+	$("#view_reservations .page_content #container #grid_header").html(template);
 }
 
 function getResData() {// Handler for .ready() called.
@@ -335,6 +478,37 @@ function getResData() {// Handler for .ready() called.
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
             		generateTable(data);
+            		console.log(data);
+            },
+            error: function(data, textStatus, jqXHR) {
+                    console.log("Data= " + data);
+                    console.log("Error code= " + textStatus);
+            }
+    });
+};
+
+function getResDataAdmin() {// Handler for .ready() called.
+	var day = Date.parse(document.getElementById('dateRes').innerHTML).getDay();
+	var court_number = -1;
+	if(document.getElementById('court').innerHTML == 'Squash Court')
+		court_number = 5;
+	var zeroHourDate = phpDate;
+	var numHours = Date.parse(zeroHourDate).getHours();
+	var d = new Date();
+	
+	if(day == d.getDay()) { // if today keep current hours
+		zeroHourDate = Date.parse(zeroHourDate).clearTime().addHours(numHours);
+	}
+	else { // diff day clear hours go to 00:00
+		zeroHourDate = Date.parse(zeroHourDate).clearTime();
+	}
+	
+    $.ajax({
+    		type: "GET",
+            url: "api/reservation/" + court_number + "?start_time=" + zeroHourDate.toString('yyyy-MM-dd HH:mm:ss'),
+            dataType: "json",
+            success: function(data, textStatus, jqXHR) {
+            		generateTableAdmin(data);
             		console.log(data);
             },
             error: function(data, textStatus, jqXHR) {

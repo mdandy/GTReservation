@@ -12,6 +12,16 @@ function todaysDate() {
 	return currDate;
 }
 
+function todaysDateAdmin() {
+	currDate = Date.today().toString("ddd MMM d yyyy");	
+	phpDate = Date.today().setTimeToNow().toString("yyyy-MM-dd HH:mm:ss");
+	document.getElementById('dateRes').innerHTML = currDate;
+	today = currDate; // this is only called once so set todays date
+	$('#prevDate').addClass('ui-disabled'); // disable prev button
+	getResDataAdmin();
+	return currDate;
+}
+
 function initPhpDate() {
 	phpDate = Date.today().setTimeToNow().toString("yyyy-MM-dd HH:mm:ss");
 	return phpDate;
