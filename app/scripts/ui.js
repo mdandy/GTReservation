@@ -83,6 +83,8 @@ $('#search_reservations').live('pageshow', function() {
 		$(".status").empty();
 });
 
+
+
 /**
  * UI LIB
  */
@@ -256,7 +258,7 @@ function generateTable(data) {
 					rcount++;
 				}
 				else{
-					template += "<div class='grid_cell ui-block-e' style='cursor:pointer' onclick='dialog(" + 5 + ',' 
+					template += "<div class='grid_cell ui-block-b' style='cursor:pointer' onclick='dialog(" + 5 + ',' 
 					+ i + ")" + "'></div>";
 				}
 			}
@@ -407,7 +409,7 @@ function generateTableAdmin(data) {
 					rcount++;
 				}
 				else{
-					template += "<div class='grid_cell ui-block-e'></div>";
+					template += "<div class='grid_cell ui-block-b'></div>";
 				}
 			}
 			else{
