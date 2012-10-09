@@ -701,6 +701,7 @@ function cancel_reservation_by_time()
         var to_time_raw = $("input[name='to_time']").val();
         var comment = $("#cancel_reservations .page_content #cancel_form #comment").val();
 
+        var from_raw = from_date_raw + " " + from_time_raw;
         var from_date = Date.parse(from_date_raw + " " + from_time_raw);
         var to_date = Date.parse(to_date_raw + " " + to_time_raw);
         if (to_date.isAfter(from_date))
@@ -711,7 +712,7 @@ function cancel_reservation_by_time()
 
                 $.ajax({
                 type: "DELETE",
-                url: "api/reservation/-1?interval=" + interval + "&comment=" + comment,
+                url: "api/reservation/-1?start_time=" + from_raw  + "&interval=" + interval + "&comment=" + comment,
                 dataType: "text",
                 success: function(data, textStatus, jqXHR) {
                         console.log(data);
